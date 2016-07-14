@@ -15,5 +15,8 @@
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
     "jasmine": "^2.4.1"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1"
   }
 }
