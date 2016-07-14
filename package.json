@@ -1,27 +1,17 @@
 {
-  "name": "electron-quick-start",
+  "name": "tablexi-coding-challenge",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
+  "description": "Ethan Kent's submission for the Table XI coding challenge",
+  "main": "./src/main.js",
   "scripts": {
     "start": "electron ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron/electron-quick-start.git"
+    "url": "git+https://github.com/ethan826/tablexi-coding-challenge"
   },
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
-  "bugs": {
-    "url": "https://github.com/electron/electron-quick-start/issues"
-  },
-  "homepage": "https://github.com/electron/electron-quick-start#readme",
+  "author": "Ethan Kent",
+  "homepage": "https://flashbangsplat.com/",
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
     "jasmine": "^2.4.1"
