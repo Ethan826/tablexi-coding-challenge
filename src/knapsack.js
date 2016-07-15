@@ -7,7 +7,7 @@ var Knapsack = (function () {
         this.possibleOrders = this.compute(menuItems, budget);
     }
     Knapsack.prototype.getPossibleOrders = function () {
-        return this.possibleOrders;
+        return this.possibleOrders.toJS();
     };
     Knapsack.prototype.compute = function (menuItems, budget) {
         var _this = this;
@@ -16,8 +16,8 @@ var Knapsack = (function () {
         }
         else if (menuItems.size === 1) {
             var onlyElement = menuItems.get(0);
-            if (budget % onlyElement === 0) {
-                return immutable_1.List([immutable_1.List(Array(budget / onlyElement).fill(onlyElement))]);
+            if (budget % onlyElement.price === 0) {
+                return immutable_1.List([immutable_1.List(Array(budget / onlyElement.price).fill(onlyElement))]);
             }
             else {
                 return null;
@@ -25,10 +25,10 @@ var Knapsack = (function () {
         }
         else {
             return menuItems.flatMap(function (menuItem) {
-                var newBudget = budget - menuItem;
+                var newBudget = budget - menuItem.price;
                 var newMenuItems = _this.menuItems.filter(function (c) {
-                    var menuItemCeiling = Math.min(newBudget, menuItem);
-                    return c <= menuItemCeiling;
+                    var menuItemCeiling = Math.min(newBudget, menuItem.price);
+                    return c.price <= menuItemCeiling;
                 });
                 if (newBudget === 0)
                     return immutable_1.List([immutable_1.List([menuItem])]);
@@ -43,4 +43,13 @@ var Knapsack = (function () {
     return Knapsack;
 }());
 exports.Knapsack = Knapsack;
-console.log((new Knapsack(immutable_1.List([2, 3, 4]), 6)).getPossibleOrders());
+var k = new Knapsack(immutable_1.List([
+    { food: "mixed fruit", price: 215 },
+    { food: "french fries", price: 275 },
+    { food: "side salad", price: 335 },
+    { food: "hot wings", price: 355 },
+    { food: "mozzarella sticks", price: 420 },
+    { food: "sampler plate", price: 580 }
+]), 1505);
+var foo = k.getPossibleOrders();
+console.log(foo);
