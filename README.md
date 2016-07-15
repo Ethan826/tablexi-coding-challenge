@@ -46,6 +46,11 @@ would fail to return any result.
 
 #### Example
 
+Note that these examples are simplified by removing the fact that we use
+`Immutable.List`, that the menu items are actually objects that also
+contain the food name, and that there are some quirks with nesting and
+flattening lists of lists.
+
 Consider the following example: the menu items are `[2, 3, 4]`, and the
 budget is 6. The algorithm makes a recursive call on each of the
 elements iff the list has at least two elements.
@@ -60,14 +65,15 @@ reach one final solution of `[[2, 4]]`.
 
 For the 3 element, the recursive call sets the new budget to 6 - 3 = 3
 and filters the menu items to `[2, 3]`. The algorithm recursively
-evaluates `compute(List([]), 1)` and `compute(List([3]), 0)`. The first
-of those two recursive calls encounters a base case (an empty list) and
-returns `null` because there are no candidates. The second call actually
-never gets made because when the new budget is exactly zero, we return
-the menu item under consideration (for exactly this situation). So the
-final result for the 3 element is `[[3, 3]]`.
+evaluates `compute([], 1)` and `compute([3], 0)`. The first of those two
+recursive calls encounters a base case (an empty list) and returns
+`null` because there are no candidates. The second call actually never
+gets made because when the new budget is exactly zero, we return the
+menu item under consideration (for exactly this situation). So the final
+result for the 3 element is `[[3, 3]]`.
 
 For the 2 element the recursive call sets the new budget to 6 - 2 = 4
 and filters the menu items to `[2]`. This is another base case (a
 one-item list). The base case tests whether `4 % 2 === 0`. It does, so
-it returns `Array(budget / menuItems[0]).fill(menuItems[0])`.
+it returns `Array(budget / onlyItem).fill(onlyItem)` where
+`onlyItem = menuItems[0]`.
