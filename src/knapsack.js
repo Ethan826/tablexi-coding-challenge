@@ -1,9 +1,15 @@
 "use strict";
 var immutable_1 = require("immutable");
 var Knapsack = (function () {
-    function Knapsack() {
+    function Knapsack(candidates, target) {
+        this.candidates = candidates;
+        this.target = target;
+        this.possibleOrders = this.compute(candidates, target);
     }
-    Knapsack.knapsack = function (candidates, target) {
+    Knapsack.prototype.getPossibleOrders = function () {
+        return this.possibleOrders;
+    };
+    Knapsack.prototype.compute = function (candidates, target) {
         var _this = this;
         if (candidates.size === 0) {
             return null;
@@ -20,7 +26,7 @@ var Knapsack = (function () {
         else {
             return candidates.flatMap(function (candidate) {
                 var newTarget = target - candidate;
-                var results = _this.knapsack(candidates.filter(function (e) { return e <= Math.min(newTarget, candidate); }), newTarget);
+                var results = _this.compute(_this.candidates.filter(function (e) { return e <= Math.min(newTarget, candidate); }), newTarget);
                 return results ? results.map(function (e) { return e.concat(candidate); }) : null;
             });
         }

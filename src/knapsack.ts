@@ -1,12 +1,21 @@
 /// <reference path="../typings/index.d.ts"/>
 
-import {List} from "immutable";
+import {List, Iterable} from "immutable";
 
 // This actually returns List<List<number>>, but see
 // https://github.com/facebook/immutable-js/issues/634.
 export class Knapsack {
-  static knapsack(candidates: List<number>, target: number): any {
+  private possibleOrders: Iterable<{}, {}>;
 
+  constructor(private candidates: List<number>, private target: number) {
+    this.possibleOrders = this.compute(candidates, target);
+  }
+
+  getPossibleOrders() {
+    return this.possibleOrders;
+  }
+
+  private compute(candidates, target): Iterable<{}, {}> {
     // Base cases
     if (candidates.size === 0) {
       return null;
@@ -22,13 +31,13 @@ export class Knapsack {
       // call optimization, but we run into excessive runtime before we encounter
       // stack overflows.
     } else {
-      return candidates.flatMap((candidate: number): List<List<number>> => {
+      return candidates.flatMap((candidate: number) => {
         let newTarget = target - candidate;
-        let results = this.knapsack(
-          candidates.filter(e => e <= Math.min(newTarget, candidate)) as List<number>,
+        let results = this.compute(
+          this.candidates.filter(e => e <= Math.min(newTarget, candidate)) as List<number>,
           newTarget
         );
-        return results ? results.map(e => e.concat(candidate)) : null;
+        return results ? results.map((e: List<number>) => e.concat(candidate)) : null;
       });
     }
   };
