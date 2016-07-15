@@ -47,7 +47,7 @@ would fail to return any result.
 
 #### Example
 
-Note that these examples are simplified by removing the fact that we use
+Note that these examples are simplified by eliding the facts that we use
 `Immutable.List`, that the menu items are actually objects that also
 contain the food name, and that there are some quirks with nesting and
 flattening lists of lists.
