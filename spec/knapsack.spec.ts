@@ -1,37 +1,52 @@
 /// <reference path="../typings/index.d.ts"/>
 import {Knapsack} from "../src/knapsack";
-import {List} from "immutable";
-import {FoodEntry} from "../src/parser";
+import {List, Set} from "immutable";
+import {FoodEntry} from "../src/interfaces";
 
 describe("knapsack", () => {
+  let expectedResultGiven = Set([
+    List([215, 215, 215, 215, 215, 215, 215]),
+    List([215, 355, 355, 580])
+  ]);
+
   it("correctly computes the supplied problem", () => {
-    let expectedResult = [
-      [
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 },
-        { food: "mixed fruit", price: 215 }
-      ], [
-        { food: "mixed fruit", price: 215 },
-        { food: "hot wings", price: 355 },
-        { food: "hot wings", price: 355 },
-        { food: "sampler plate", price: 580 }
-      ]
-    ];
+    let expectedResultGiven = Set([
+      List([215, 215, 215, 215, 215, 215, 215]),
+      List([215, 355, 355, 580])
+    ]);
 
-    let menuItems = List([
-      { food: "mixed fruit", price: 215 },
-      { food: "french fries", price: 275 },
-      { food: "side salad", price: 335 },
-      { food: "hot wings", price: 355 },
-      { food: "mozzarella sticks", price: 420 },
-      { food: "sampler plate", price: 580 }
-    ]).sort() as List<FoodEntry>;
+    let menuItems = Set([215, 275, 335, 355, 420, 580]);
 
-    let result = (new Knapsack(menuItems, 1505)).getPossibleOrders();
-    expect(result).toEqual(expectedResult);
+    expect(Knapsack.compute(menuItems, 1505)).toEqual(expectedResultGiven);
+  });
+
+  it("correctly computes the supplied problem without extraneous numbers", () => {
+    expect(Knapsack.compute(Set([215, 355, 580]), 1505)).toEqual(expectedResultGiven);
+  });
+
+  it("finds no results when supplied problem is altered", () => {
+    expect(Knapsack.compute(Set([225, 355, 580]), 1505)).not.toEqual(expectedResultGiven);
+  });
+
+  it("corretly computes additional data", () => {
+    (() => {
+      let expectedResult = Set([List([2, 2, 2]), List([3, 3]), List([2, 4])]);
+      expect(Knapsack.compute(Set([2, 3, 4]), 6)).toEqual(expectedResult);
+    })();
+
+    (() => {
+      let expectedResult = Set([List([2, 2, 2]), List([3, 3])]);
+      expect(Knapsack.compute(Set([2, 3, 5]), 6)).toEqual(expectedResult);
+    })();
+
+    (() => {
+      let expectedResult = Set([
+        List([1, 1, 1, 1]).sort(),
+        List([2, 1, 1]).sort(),
+        List([2, 2]).sort(),
+        List([3, 1]).sort()
+      );
+      expect(Knapsack.compute(Set([1, 2, 3]), 4)).toEqual(expectedResult);
+    })();
   });
 });

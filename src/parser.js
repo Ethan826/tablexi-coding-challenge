@@ -2,21 +2,27 @@
 var immutable_1 = require("immutable");
 var Parser = (function () {
     function Parser(data) {
-        var _this = this;
         this.data = data;
-        var lineArray = data.split("\n");
-        this.desiredPrice = this.parseOneLine(lineArray[0]).price;
-        this.foodEntries = lineArray
+        this.lines = this.getLines();
+        this.desiredPrice = this.getDesiredPrice();
+        this.foodEntries = this.getFoodEntries();
+    }
+    Parser.prototype.getParserResults = function () {
+        return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
+    };
+    Parser.prototype.getLines = function () {
+        return immutable_1.List(this.data.split("\n"));
+    };
+    Parser.prototype.getDesiredPrice = function () {
+        return this.parseOneLine(this.lines.get(0)).price;
+    };
+    Parser.prototype.getFoodEntries = function () {
+        var _this = this;
+        return this.lines
             .slice(1)
             .reduce(function (accum, el) {
             return accum.push(_this.parseOneLine(el));
         }, immutable_1.List());
-    }
-    Parser.prototype.getDesiredPrice = function () {
-        return this.desiredPrice / 100.0;
-    };
-    Parser.prototype.getFoodEntries = function () {
-        return this.foodEntries;
     };
     Parser.prototype.parseOneLine = function (line) {
         var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);

@@ -5,11 +5,11 @@ var TEST_DATA = "$15.05\nmixed fruit,$2.15\nfrench fries,$2.75\nside salad,$3.35
 describe("parser", function () {
     it("can determine the desired price", function () {
         var p = new parser_1.Parser(TEST_DATA);
-        expect(p.getDesiredPrice()).toBe(15.05);
+        expect(p.getParserResults().desiredPrice).toBe(1505);
     });
     it("can create array of food items", function () {
         var p = new parser_1.Parser(TEST_DATA);
-        expect(p.getFoodEntries().sort())
+        expect(p.getParserResults().foodEntries.sort())
             .toEqual(immutable_1.List([
             { food: "mixed fruit", price: 215 },
             { food: "french fries", price: 275 },
@@ -18,6 +18,6 @@ describe("parser", function () {
             { food: "mozzarella sticks", price: 420 },
             { food: "sampler plate", price: 580 }
         ]).sort());
-        expect(p.getFoodEntries().sort()).not.toEqual(immutable_1.List(["flippy"]).sort());
+        expect(p.getParserResults().foodEntries.sort()).not.toEqual(immutable_1.List(["flippy"]).sort());
     });
 });

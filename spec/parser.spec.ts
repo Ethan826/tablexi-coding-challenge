@@ -14,12 +14,12 @@ sampler plate,$5.80`;
 describe("parser", () => {
   it("can determine the desired price", () => {
     let p = new Parser(TEST_DATA);
-    expect(p.getDesiredPrice()).toBe(15.05);
+    expect(p.getParserResults().desiredPrice).toBe(1505);
   });
 
   it("can create array of food items", () => {
     let p = new Parser(TEST_DATA);
-    expect(p.getFoodEntries().sort())
+    expect(p.getParserResults().foodEntries.sort())
       .toEqual(List([
         { food: "mixed fruit", price: 215 },
         { food: "french fries", price: 275 },
@@ -30,6 +30,6 @@ describe("parser", () => {
       ]).sort());
 
     // Sanity check to make sure Jasmine and Immutable are playing nicely
-    expect(p.getFoodEntries().sort()).not.toEqual(List(["flippy"]).sort());
+    expect(p.getParserResults().foodEntries.sort()).not.toEqual(List(["flippy"]).sort());
   });
 });

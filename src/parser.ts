@@ -1,30 +1,35 @@
-import {List} from "immutable";
-
-export interface FoodEntry {
-  food: string;
-  price: number;
-}
+import {List, Map} from "immutable";
+import {FoodEntry, ParserResults} from "./interfaces";
 
 export class Parser {
+  private lines: List<string>;
   private desiredPrice: number;
   private foodEntries: List<FoodEntry>;
 
   constructor(private data: string) {
-    let lineArray = data.split("\n");
-    this.desiredPrice = this.parseOneLine(lineArray[0]).price;
-    this.foodEntries = lineArray
+    this.lines = this.getLines();
+    this.desiredPrice = this.getDesiredPrice();
+    this.foodEntries = this.getFoodEntries();
+  }
+
+  getParserResults() {
+    return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
+  }
+
+  private getLines(): List<string> {
+    return List(this.data.split("\n"));
+  }
+
+  private getDesiredPrice(): number {
+    return this.parseOneLine(this.lines.get(0)).price;
+  }
+
+  private getFoodEntries(): List<FoodEntry> {
+    return this.lines
       .slice(1)
       .reduce((accum: List<FoodEntry>, el: string): List<FoodEntry> => {
         return accum.push(this.parseOneLine(el));
       }, List()) as List<FoodEntry>;
-  }
-
-  getDesiredPrice(): number {
-    return this.desiredPrice / 100.0;
-  }
-
-  getFoodEntries(): List<FoodEntry> {
-    return this.foodEntries;
   }
 
   private parseOneLine(line: string): FoodEntry {
