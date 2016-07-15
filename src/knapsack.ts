@@ -1,23 +1,29 @@
 /// <reference path="../typings/index.d.ts"/>
 
-import {List, Iterable} from "immutable";
+import {List, Set, Map, Iterable} from "immutable";
 import {FoodEntry} from "./parser";
 
 export class Knapsack {
+  private priceMap: Map<number, List<FoodEntry>>;
+  private prices: Set<number>;
+  private possiblePriceCombos: Iterable<{}, {}>;
   private possibleOrders: Iterable<{}, {}>;
 
-  constructor(private menuItems: List<FoodEntry>, private budget: number) {
-    this.possibleOrders = this.compute(menuItems, budget);
+  constructor(menuItems: Array<FoodEntry>, private budget: number) {
+    this.menuItems = getPriceMap(menuItems);
+    this.prices = (this.menuItems.map(i => i.price)).toSet();
+    console.log(this.prices);
+    this.possiblePriceCombos = this.compute(this.prices, budget);
   }
 
   getPossibleOrders() {
-    return this.possibleOrders.toJS();
+    return this.possiblePriceCombos.toJS();
   }
 
-  // This actually returns List<List<number>>, but see
+  // This actually returns List<List<FoodEntry>>, but see
   // https://github.com/facebook/immutable-js/issues/634.
   private compute(
-    menuItems: List<FoodEntry>,
+    menuItems: Set<number>,
     budget: number): Iterable<{}, {}> {
     // Base cases
 
@@ -30,8 +36,8 @@ export class Knapsack {
       // E.g., for menuItem 2 and budget 8, return List([2, 2, 2, 2]).
     } else if (menuItems.size === 1) {
       let onlyElement = menuItems.get(0);
-      if (budget % onlyElement.price === 0) {
-        return List([List(Array(budget / onlyElement.price).fill(onlyElement))]);
+      if (budget % onlyElement === 0) {
+        return List([List(Array(budget / onlyElement).fill(onlyElement))]);
       } else {
         return null;
       }
@@ -44,12 +50,12 @@ export class Knapsack {
        * README for additional information.
        */
     } else {
-      return menuItems.flatMap((menuItem: FoodEntry) => {
-        let newBudget = budget - menuItem.price;
-        let newMenuItems = this.menuItems.filter(c => {
-          let menuItemCeiling = Math.min(newBudget, menuItem.price);
-          return c.price <= menuItemCeiling;
-        }) as List<FoodEntry>; // help the type checker
+      return menuItems.flatMap((menuItem: number) => {
+        let newBudget = budget - menuItem;
+        let newMenuItems = this.prices.filter(c => {
+          let menuItemCeiling = Math.min(newBudget, menuItem);
+          return c <= menuItemCeiling;
+        }) as Set<number>; // help the type checker
         if (newBudget === 0) return List([List([menuItem])]);
         let results = this.compute(newMenuItems, newBudget);
         return results
@@ -58,17 +64,32 @@ export class Knapsack {
       });
     }
   };
+
+  private getPermutations() {
+    let allPrices = this.menuItems.map(i => i.price) as List<number>;
+    let repeats = this.getRepeats(allPrices) as Set<number>;
+  }
+
+  private getPriceMap(menuItems: FoodEntry[]): any {
+    return menuItems
+      .reduce((accum: Map<string, number>, el: FoodItem) => {
+        return accum.has(el.price)
+          ? accum.update(el.price, v => v.concat(el.food))
+          : accum.set(el.price, List([el.food]));
+      }, Map({}));
+  }
 }
 
 let k = new Knapsack(
-  List([
-    { food: "mixed fruit", price: 215 },
+  [ { food: "mixed fruit", price: 215 },
+    { food: "dipsy", price: 215 },
     { food: "french fries", price: 275 },
     { food: "side salad", price: 335 },
     { food: "hot wings", price: 355 },
     { food: "mozzarella sticks", price: 420 },
-    { food: "sampler plate", price: 580 }
-  ]), 1505);
+    { food: "sampler plate", price: 580 },
+    { food: "fart", price: 580 }
+  ], 1505);
 
 let foo = k.getPossibleOrders();
 console.log(foo);
