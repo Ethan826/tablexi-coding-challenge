@@ -1,4 +1,4 @@
-import {List} from "immutable";
+import {Set} from "immutable";
 
 export interface FoodEntry {
   food: string;
@@ -7,5 +7,5 @@ export interface FoodEntry {
 
 export interface ParserResults {
   desiredPrice: number;
-  foodEntries: List<FoodEntry>;
+  foodEntries: Set<FoodEntry>;
 }

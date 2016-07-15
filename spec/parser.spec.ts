@@ -1,7 +1,7 @@
 /// <reference path="../typings/index.d.ts"/>
 
 import {Parser} from "../src/parser";
-import {List} from "immutable";
+import {Set} from "immutable";
 
 const TEST_DATA = `$15.05
 mixed fruit,$2.15
@@ -17,10 +17,10 @@ describe("parser", () => {
     expect(p.getParserResults().desiredPrice).toBe(1505);
   });
 
-  it("can create array of food items", () => {
+  it("can create Set of food items", () => {
     let p = new Parser(TEST_DATA);
     expect(p.getParserResults().foodEntries.sort())
-      .toEqual(List([
+      .toEqual(Set([
         { food: "mixed fruit", price: 215 },
         { food: "french fries", price: 275 },
         { food: "side salad", price: 335 },
@@ -30,6 +30,6 @@ describe("parser", () => {
       ]).sort());
 
     // Sanity check to make sure Jasmine and Immutable are playing nicely
-    expect(p.getParserResults().foodEntries.sort()).not.toEqual(List(["flippy"]).sort());
+    expect(p.getParserResults().foodEntries.sort()).not.toEqual(Set(["flippy"]).sort());
   });
 });

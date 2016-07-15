@@ -6,6 +6,8 @@
     "github-electron": "registry:dt/github-electron#1.2.5+20160624085047",
     "immutable": "registry:dt/immutable#3.8.1+20160608070634",
     "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
-    "node": "registry:dt/node#6.0.0+20160709114037"
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
+    "node": "registry:dt/node#6.0.0+20160709114037",
+    "promise": "registry:dt/promise#7.1.1+20160602154553"
   }
 }

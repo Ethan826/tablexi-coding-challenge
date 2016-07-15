@@ -3,8 +3,8 @@ var immutable_1 = require("immutable");
 var MapMaker = (function () {
     function MapMaker() {
     }
-    MapMaker.makeMap = function (parserResults) {
-        return parserResults.foodEntries
+    MapMaker.makeMap = function (foodEntries) {
+        return foodEntries
             .reduce(function (accum, el) {
             return accum.has(el.price)
                 ? accum.update(el.price, function (v) { return v.add(el.food); })

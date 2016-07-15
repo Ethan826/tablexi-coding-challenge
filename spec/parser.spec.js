@@ -7,10 +7,10 @@ describe("parser", function () {
         var p = new parser_1.Parser(TEST_DATA);
         expect(p.getParserResults().desiredPrice).toBe(1505);
     });
-    it("can create array of food items", function () {
+    it("can create Set of food items", function () {
         var p = new parser_1.Parser(TEST_DATA);
         expect(p.getParserResults().foodEntries.sort())
-            .toEqual(immutable_1.List([
+            .toEqual(immutable_1.Set([
             { food: "mixed fruit", price: 215 },
             { food: "french fries", price: 275 },
             { food: "side salad", price: 335 },
@@ -18,6 +18,6 @@ describe("parser", function () {
             { food: "mozzarella sticks", price: 420 },
             { food: "sampler plate", price: 580 }
         ]).sort());
-        expect(p.getParserResults().foodEntries.sort()).not.toEqual(immutable_1.List(["flippy"]).sort());
+        expect(p.getParserResults().foodEntries.sort()).not.toEqual(immutable_1.Set(["flippy"]).sort());
     });
 });

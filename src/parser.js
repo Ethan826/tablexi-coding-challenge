@@ -22,7 +22,7 @@ var Parser = (function () {
             .slice(1)
             .reduce(function (accum, el) {
             return accum.push(_this.parseOneLine(el));
-        }, immutable_1.List());
+        }, immutable_1.List()).toSet();
     };
     Parser.prototype.parseOneLine = function (line) {
         var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);

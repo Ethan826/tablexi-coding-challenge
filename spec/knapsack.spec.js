@@ -31,10 +31,10 @@ describe("knapsack", function () {
         })();
         (function () {
             var expectedResult = immutable_1.Set([
-                immutable_1.List([1, 1, 1, 1]).sort(),
-                immutable_1.List([2, 1, 1]).sort(),
-                immutable_1.List([2, 2]).sort(),
-                immutable_1.List([3, 1]).sort()]);
+                immutable_1.List([1, 1, 1, 1]),
+                immutable_1.List([1, 1, 2]),
+                immutable_1.List([2, 2]),
+                immutable_1.List([1, 3])]);
             expect(knapsack_1.Knapsack.compute(immutable_1.Set([1, 2, 3]), 4)).toEqual(expectedResult);
         })();
     });

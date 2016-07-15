@@ -29,6 +29,7 @@ describe("knapsack", () => {
   });
 
   it("corretly computes additional data", () => {
+    // Wrapping in IIFE for namespacing
     (() => {
       let expectedResult = Set([List([2, 2, 2]), List([3, 3]), List([2, 4])]);
       expect(Knapsack.compute(Set([2, 3, 4]), 6)).toEqual(expectedResult);
@@ -41,11 +42,11 @@ describe("knapsack", () => {
 
     (() => {
       let expectedResult = Set([
-        List([1, 1, 1, 1]).sort(),
-        List([2, 1, 1]).sort(),
-        List([2, 2]).sort(),
-        List([3, 1]).sort()
-      );
+        List([1, 1, 1, 1]),
+        List([1, 1, 2]),
+        List([2, 2]),
+        List([1, 3])]);
+
       expect(Knapsack.compute(Set([1, 2, 3]), 4)).toEqual(expectedResult);
     })();
   });

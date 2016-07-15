@@ -50,6 +50,3 @@ export class Knapsack {
     }
   };
 }
-
-// let menuItems = Set([215, 275, 335, 355, 420, 580]);
-// console.log(Knapsack.compute(menuItems, 1505));

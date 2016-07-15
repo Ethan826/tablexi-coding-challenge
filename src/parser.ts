@@ -1,10 +1,10 @@
-import {List, Map} from "immutable";
+import {List, Set, Map} from "immutable";
 import {FoodEntry, ParserResults} from "./interfaces";
 
 export class Parser {
   private lines: List<string>;
   private desiredPrice: number;
-  private foodEntries: List<FoodEntry>;
+  private foodEntries: Set<FoodEntry>;
 
   constructor(private data: string) {
     this.lines = this.getLines();
@@ -24,12 +24,12 @@ export class Parser {
     return this.parseOneLine(this.lines.get(0)).price;
   }
 
-  private getFoodEntries(): List<FoodEntry> {
+  private getFoodEntries(): Set<FoodEntry> {
     return this.lines
       .slice(1)
       .reduce((accum: List<FoodEntry>, el: string): List<FoodEntry> => {
         return accum.push(this.parseOneLine(el));
-      }, List()) as List<FoodEntry>;
+      }, List()).toSet() as any;
   }
 
   private parseOneLine(line: string): FoodEntry {
