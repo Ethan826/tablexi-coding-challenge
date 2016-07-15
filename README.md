@@ -19,11 +19,12 @@ problem: what menu items will fill out what remains of our budget?
 We keep recursively solving that problem until we have only one or zero
 items left that we can afford. If there is only one item left, we see if
 we can buy one or more of that item and exactly use up what remains of
-our budget. If we cannot use up all our money by buying some multiple of
-the only item left, or if there are no items left that we can afford, we
-realize that we cannot buy the item that made the recursive call. If we
-can buy some item that exactly exhausts our budget, we pass that
-information back to our recursive caller.
+our budget. If we cannot use up all our money by buying some integer
+multiple of the only item left, or if there are no items left that we
+can afford, we realize that we cannot buy the item that made the
+recursive call. If we can buy some item that exactly exhausts our
+budget, we pass that information back to our recursive caller, which
+concatenates itself to the results and returns.
 
 In preparing for the recursive call, we know that we cannot consider any
 menu items that are *larger* than our current budget, so we can
