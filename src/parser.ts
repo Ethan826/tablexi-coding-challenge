@@ -9,26 +9,31 @@ export class Parser {
   private desiredPrice: number;
   private foodEntries: List<FoodEntry>;
 
-  constructor(private data: String) {
+  constructor(private data: string) {
     let lineArray = data.split("\n");
     this.desiredPrice = this.parseOneLine(lineArray[0]).price;
     this.foodEntries = lineArray
       .slice(1)
-      .reduce((accum: List<FoodEntry>, el: String): List<FoodEntry> => {
+      .reduce((accum: List<FoodEntry>, el: string): List<FoodEntry> => {
         return accum.push(this.parseOneLine(el));
       }, List()) as List<FoodEntry>;
   }
 
   getDesiredPrice(): number {
-    return this.desiredPrice;
+    return this.desiredPrice / 100.0;
   }
 
   getFoodEntries(): List<FoodEntry> {
     return this.foodEntries;
   }
 
-  private parseOneLine(line: String): FoodEntry {
+  private parseOneLine(line: string): FoodEntry {
     let match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
-    return { food: match[1].trim(), price: parseFloat(match[2]) };
+    return { food: match[1].trim(), price: this.integerifyCash(match[2]) };
+  }
+
+  private integerifyCash(num: string): number {
+    let asFloat = parseFloat(num) * 100;
+    return parseInt(asFloat.toString());
   }
 }

@@ -13,14 +13,18 @@ var Parser = (function () {
         }, immutable_1.List());
     }
     Parser.prototype.getDesiredPrice = function () {
-        return this.desiredPrice;
+        return this.desiredPrice / 100.0;
     };
     Parser.prototype.getFoodEntries = function () {
         return this.foodEntries;
     };
     Parser.prototype.parseOneLine = function (line) {
         var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
-        return { food: match[1].trim(), price: parseFloat(match[2]) };
+        return { food: match[1].trim(), price: this.integerifyCash(match[2]) };
+    };
+    Parser.prototype.integerifyCash = function (num) {
+        var asFloat = parseFloat(num) * 100;
+        return parseInt(asFloat.toString());
     };
     return Parser;
 }());

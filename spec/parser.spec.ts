@@ -21,12 +21,12 @@ describe("parser", () => {
     let p = new Parser(TEST_DATA);
     expect(p.getFoodEntries().sort())
       .toEqual(List([
-        { food: "mixed fruit", price: 2.15 },
-        { food: "french fries", price: 2.75 },
-        { food: "side salad", price: 3.35 },
-        { food: "hot wings", price: 3.55 },
-        { food: "mozzarella sticks", price: 4.20 },
-        { food: "sampler plate", price: 5.80 }
+        { food: "mixed fruit", price: 215 },
+        { food: "french fries", price: 275 },
+        { food: "side salad", price: 335 },
+        { food: "hot wings", price: 355 },
+        { food: "mozzarella sticks", price: 420 },
+        { food: "sampler plate", price: 580 }
       ]).sort());
 
     // Sanity check to make sure Jasmine and Immutable are playing nicely
