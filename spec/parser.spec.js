@@ -1,18 +1,23 @@
 "use strict";
 var parser_1 = require("../src/parser");
 var immutable_1 = require("immutable");
-var TEST_DATA = "$15.05\n    mixed fruit,$2.15\n    french fries,$2.75\n    side salad,$3.35\n    hot wings,$3.55\n    mozzarella sticks,$4.20\n    sampler plate,$5.80";
+var TEST_DATA = "$15.05\nmixed fruit,$2.15\nfrench fries,$2.75\nside salad,$3.35\nhot wings,$3.55\nmozzarella sticks,$4.20\nsampler plate,$5.80";
 describe("parser", function () {
     it("can determine the desired price", function () {
         var p = new parser_1.Parser(TEST_DATA);
         expect(p.getDesiredPrice()).toBe(15.05);
     });
-    it("can extract food items", function () {
+    it("can create array of food items", function () {
         var p = new parser_1.Parser(TEST_DATA);
-        expect(p.getFoods().sort)
+        expect(p.getFoodEntries().sort())
             .toEqual(immutable_1.List([
-            "mixed fruit", "french fries", "side salad", "hot wings",
-            "mozzarella sticks", "sampler plate", "flippy"
-        ]).sort);
+            { food: "mixed fruit", price: 2.15 },
+            { food: "french fries", price: 2.75 },
+            { food: "side salad", price: 3.35 },
+            { food: "hot wings", price: 3.55 },
+            { food: "mozzarella sticks", price: 4.20 },
+            { food: "sampler plate", price: 5.80 }
+        ]).sort());
+        expect(p.getFoodEntries().sort()).not.toEqual(immutable_1.List(["flippy"]).sort());
     });
 });

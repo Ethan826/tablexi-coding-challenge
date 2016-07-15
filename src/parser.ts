@@ -2,11 +2,11 @@ import {List} from "immutable";
 
 export interface FoodEntry {
   food: string;
-  price: Number;
+  price: number;
 }
 
 export class Parser {
-  private desiredPrice: Number;
+  private desiredPrice: number;
   private foodEntries: List<FoodEntry>;
 
   constructor(private data: String) {
@@ -19,18 +19,16 @@ export class Parser {
       }, List()) as List<FoodEntry>;
   }
 
-  private parseOneLine(line: String): FoodEntry {
-    let match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
-    return { food: match[1].trim(), price: parseFloat(match[2]) };
-  }
-
-  getDesiredPrice(): Number {
+  getDesiredPrice(): number {
     return this.desiredPrice;
   }
 
-  getFoods(): List<String> {
-    return this.foodEntries
-      .map(e => e.food)
-      .toList();
+  getFoodEntries(): List<FoodEntry> {
+    return this.foodEntries;
+  }
+
+  private parseOneLine(line: String): FoodEntry {
+    let match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
+    return { food: match[1].trim(), price: parseFloat(match[2]) };
   }
 }

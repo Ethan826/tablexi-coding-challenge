@@ -12,17 +12,15 @@ var Parser = (function () {
             return accum.push(_this.parseOneLine(el));
         }, immutable_1.List());
     }
-    Parser.prototype.parseOneLine = function (line) {
-        var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
-        return { food: match[1].trim(), price: parseFloat(match[2]) };
-    };
     Parser.prototype.getDesiredPrice = function () {
         return this.desiredPrice;
     };
-    Parser.prototype.getFoods = function () {
-        return this.foodEntries
-            .map(function (e) { return e.food; })
-            .toList();
+    Parser.prototype.getFoodEntries = function () {
+        return this.foodEntries;
+    };
+    Parser.prototype.parseOneLine = function (line) {
+        var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
+        return { food: match[1].trim(), price: parseFloat(match[2]) };
     };
     return Parser;
 }());
