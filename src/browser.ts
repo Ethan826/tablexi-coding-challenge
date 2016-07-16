@@ -6,50 +6,56 @@ const Promise = require("es6-promise").Promise;
 const Rx = require("rx-lite");
 
 import {App} from "./app";
-import {initialPage} from "./templates";
+import {initialPage, resultsPage} from "./templates";
 
 export class Browser {
   private initialPage: string;
   private resultsPage: string;
-  private clickListener: Rx.Observable<any>;
-  private fileData: Rx.Observable<string>;
-  private app: Rx.Observable<App>;
+  private clickListenerObserver: Rx.Observable<any>;
+  private fileDataObserver: Rx.Observable<string>;
+  private appObserver: Rx.Observable<App>;
 
   constructor() {
     this.initialPage = initialPage;
+    this.resultsPage = resultsPage;
     this.setInitialPage();
-    this.clickListener = this.setClickListener();
-    this.fileData = this.getFileData();
-    this.app = this.fileData.map(data => new App(data));
-    this.app.subscribe(app => console.log(app.getDesiredPrice()));
-    // this.instantiateApp().subscribe(app => {
-    //   console.log(app);
-    // });
-    // this.app = this.instantiateApp().subscribe();
-    // this.fileData.then(() => console.log("Foo"));
-    // this.fileData = this.getFileData();
-    // this.app = this.fileData.then(data => this.instantiateApp());
+    this.clickListenerObserver = this.setClickListenerObserver();
+    this.fileDataObserver = this.getFileDataObserver();
+    this.appObserver = this.getAppObserver();
+    this.appObserver.subscribe(
+      (app) => this.displayResults(app),
+      (err) => { alert("There has been an error"); }
+    );
   }
 
   private setInitialPage() {
     document.getElementById("content").innerHTML = this.initialPage;
   }
 
-  private setClickListener() {
+  private displayResults(app: App) {
+     document.getElementById("content").innerHTML = this.resultsPage;
+  }
+
+  private setClickListenerObserver(): Rx.Observable<EventListener> {
     let button = document.getElementById("openFile");
     return Rx.Observable.fromEvent(button, "click");
   }
 
-  private getFileData(): Rx.Observable<string> {
-    return this.clickListener.flatMap(() => {
+  private getFileDataObserver(): Rx.Observable<string> {
+    return this.clickListenerObserver.flatMap(() => {
       let f = dialog.showOpenDialog({ properties: ["openFile"] });
       let read = Rx.Observable.fromCallback(fs.readFile);
-      return read(f[0], "utf-8").map(result => result[1]);
-    });
+      return read(f[0], "utf-8")
+        .map((result: string[]) => result[1]);
+    }) as Rx.Observable<string>;
+  }
+
+  private getAppObserver(): Rx.Observable<App> {
+    return this.fileDataObserver.map(data => new App(data));
   }
 
   // private instantiateApp(): Rx.Observable<App> {
-  //   return this.fileData.map(data => {
+  //   return this.fileDataObserver.map(data => {
   //     return new App(data);
   //   });
   // }

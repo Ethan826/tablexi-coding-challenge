@@ -1,4 +1,4 @@
-export const initialPage = `<h1>Menu Budgeter</h1>
+export const initialPage = `
 <p>This app will calculate all of the menu orders available for a particular budget.</p>
 <h3>Data Format</h3>
 <p>
@@ -22,3 +22,6 @@ Do not insert spaces except within the food name.
 </p>
 <hr>
 <button id="openFile" class="btn">Select File</button>`;
+
+export const resultsPage = `
+<p>'sup</p>`;
