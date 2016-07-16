@@ -17,7 +17,7 @@ export class Parser {
   }
 
   private getLines(): List<string> {
-    return List(this.data.split("\n"));
+    return List(this.data.split("\n").filter(s => s && s.length > 0));
   }
 
   private getDesiredPrice(): number {

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Ethan Kent's submission for the Table XI coding challenge",
   "main": "./src/main.js",
+  "license": "MIT",
   "scripts": {
     "start": "electron ."
   },
@@ -18,9 +19,9 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
+    "es6-promise": "^3.2.1",
     "es6-shim": "^0.35.1",
     "immutable": "^3.8.1",
-    "jQuery": "^1.7.4",
-    "promise": "^7.1.1"
+    "rx-lite": "^4.0.8"
   }
 }

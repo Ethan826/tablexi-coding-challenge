@@ -14,7 +14,6 @@ export class App {
   constructor(data: string) {
     this.browser = new Browser();
     let parserResults = (new Parser(data)).getParserResults();
-    parserResults.foodEntries.forEach(e => console.log(e));
     this.desiredPrice = parserResults.desiredPrice;
     this.priceMap = MapMaker.makeMap(parserResults.foodEntries);
     this.priceCombinations = Knapsack.compute(

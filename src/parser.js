@@ -11,7 +11,7 @@ var Parser = (function () {
         return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
     };
     Parser.prototype.getLines = function () {
-        return immutable_1.List(this.data.split("\n"));
+        return immutable_1.List(this.data.split("\n").filter(function (s) { return s && s.length > 0; }));
     };
     Parser.prototype.getDesiredPrice = function () {
         return this.parseOneLine(this.lines.get(0)).price;
