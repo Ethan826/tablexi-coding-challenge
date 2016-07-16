@@ -2,16 +2,12 @@
 var immutable_1 = require("immutable");
 var Formatter = (function () {
     function Formatter(priceMap, priceCombinations) {
+        var _this = this;
         this.priceMap = priceMap;
         this.priceCombinations = priceCombinations;
-        this.priceCombinationsWithFreqs = this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
+        this.priceCombinationsWithFreqs = this.priceCombinations.map(function (c) { return _this.frequencies(c); });
+        this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
     }
-    Formatter.prototype.getPriceCombinationsWithFreqs = function () {
-        var _this = this;
-        return this.priceCombinations.map(function (c) {
-            _this.frequencies(c);
-        });
-    };
     Formatter.prototype.combineSamePricedFoods = function () {
         var alternatives = this.priceMap
             .entrySeq()

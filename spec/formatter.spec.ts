@@ -1,5 +1,6 @@
 /// <reference path="../typings/index.d.ts"/>
 
+import {Formatter} from "../src/formatter";
 import {Set, Map, List} from "immutable";
 
 describe("formatter", () => {
@@ -17,4 +18,8 @@ describe("formatter", () => {
     List([215, 355, 355, 580])
   ]);
 
+  it("properly formats the supplied data", () => {
+    let f = new Formatter(priceMap, priceCombinations);
+    console.log(f.makeSentences());
+  });
 });

@@ -1,20 +1,15 @@
 import {Map, Set, List, Seq} from "immutable";
 
 export class Formatter {
-  private priceCombinationsWithFreqs: Set<Map<number, number>>;
-  private priceMapWithCombinedFoods: Map<number, string>;
+  private priceCombinationsWithFreqs: any;
+  private priceMapWithCombinedFoods: any;
 
   constructor(
     private priceMap: Map<number, Set<string>>,
     private priceCombinations: Set<List<number>>
   ) {
-    this.priceCombinationsWithFreqs = this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
-  }
-
-  private getPriceCombinationsWithFreqs(): any {
-    return this.priceCombinations.map((c: Set<List<number>>) => {
-      this.frequencies(c);
-    });
+    this.priceCombinationsWithFreqs = this.priceCombinations.map(c => this.frequencies(c));
+    this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
   }
 
   private combineSamePricedFoods() {
