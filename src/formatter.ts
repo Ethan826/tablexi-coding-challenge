@@ -1,14 +1,18 @@
 import {Map, Set, List, Seq} from "immutable";
 
+// Used "any" type annotations because the type checker is completely
+// bananas with all the map and reduce calls to Immutable.js collections
+
 export class Formatter {
   private priceCombinationsWithFreqs: any;
   private priceMapWithCombinedFoods: any;
 
   constructor(
-    private priceMap: Map<number, Set<string>>,
-    private priceCombinations: Set<List<number>>
+    private priceMap: any,
+    private priceCombinations: any
   ) {
-    this.priceCombinationsWithFreqs = this.priceCombinations.map(c => this.frequencies(c));
+    this.priceCombinationsWithFreqs = this.priceCombinations
+      .map((c: any) => this.frequencies(c));
     this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
   }
 
@@ -22,7 +26,7 @@ export class Formatter {
     return alternatives;
   }
 
-  makeSentences() {
+  makeSentences(): Set<Set<string>> {
     return this.priceCombinationsWithFreqs
       .reduce((accum: Set<Set<string>>, el: Map<number, Map<number, number>>) => {
         let prices = el.keySeq();
@@ -42,7 +46,7 @@ export class Formatter {
       }, Set());
   }
 
-  private frequencies(list: Set<List<number>>): Map<number, number> {
+  private frequencies(list: any): any {
     return list.reduce(
       (accum: Map<number, number>, el: number) => {
         return accum.has(el)

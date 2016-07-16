@@ -18,8 +18,18 @@ describe("formatter", () => {
     List([215, 355, 355, 580])
   ]);
 
+  let expectedResult = Set([
+    Set(["7 order(s) of mixed fruit (at $2.15 each.)"]),
+    Set([
+      "1 order(s) of mixed fruit (at $2.15 each.)",
+      "2 order(s) of hot wings (at $3.55 each.)",
+      "1 order(s) of sampler plate (at $5.80 each.)"
+    ])
+  ]);
+
   it("properly formats the supplied data", () => {
     let f = new Formatter(priceMap, priceCombinations);
-    console.log(f.makeSentences());
+    expect(f.makeSentences().equals(expectedResult)).toBe(true);
+    expect(f.makeSentences().equals(Set([Set(["foo"])]))).toBe(false);
   });
 });

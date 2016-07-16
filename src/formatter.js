@@ -5,7 +5,8 @@ var Formatter = (function () {
         var _this = this;
         this.priceMap = priceMap;
         this.priceCombinations = priceCombinations;
-        this.priceCombinationsWithFreqs = this.priceCombinations.map(function (c) { return _this.frequencies(c); });
+        this.priceCombinationsWithFreqs = this.priceCombinations
+            .map(function (c) { return _this.frequencies(c); });
         this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
     }
     Formatter.prototype.combineSamePricedFoods = function () {

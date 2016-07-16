@@ -15,5 +15,3 @@ var App = (function () {
     return App;
 }());
 exports.App = App;
-var a = new App("$15.05\nmixed fruit,$2.15\nfrench fries,$2.75\nside salad,$3.35\nhot wings,$3.55\nmozzarella sticks,$4.20\nsampler plate,$5.80");
-console.log(a.priceMap);
