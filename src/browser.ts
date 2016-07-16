@@ -7,6 +7,7 @@ import {initialPage, resultsPage} from "./templates";
 import fs = require("fs");
 const {dialog} = require("electron").remote;
 const Rx = require("rx-lite");
+import * as $ from "jquery";
 
 export class Browser {
   private initialPage: string;
@@ -19,12 +20,21 @@ export class Browser {
   constructor() {
     this.initialPage = initialPage;
     this.resultsPage = resultsPage;
-    this.setInitialPage();
+    this.setPage(initialPage);
     this.getDataObservable().subscribe(
       (data) => {
-        alert((new App(data)).getDesiredPrice());
+        let app = new App(data);
+        this.setPage(resultsPage);
+        let element = document.getElementById("results");
+        let results = app.getResults();
+        results.forEach((combo) => {
+          $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
+          combo.forEach((sentence) => {
+            $(".entry").last().append(`<li>${sentence}</li>`);
+          });
+        });
       },
-      (err) => { alert("Aww fuck!"); }
+      (err) => { alert("There has been an error."); }
     );
   }
 
@@ -45,8 +55,9 @@ export class Browser {
       .filter(d => Parser.validateData(d));
   }
 
-  private setInitialPage() {
-    document.getElementById("content").innerHTML = this.initialPage;
+  private setPage(page: string) {
+    $("#content").empty();
+    $("#content").append(page);
   }
 
   private displayResults(app: App) {

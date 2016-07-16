@@ -24,4 +24,7 @@ Do not insert spaces except within the food name.
 <button id="openFile" class="btn">Select File</button>`;
 
 export const resultsPage = `
-<p>'sup</p>`;
+<h3>Results</h3>
+<ul id="results" class="list-group">
+</ul>
+`;

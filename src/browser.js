@@ -5,14 +5,25 @@ var templates_1 = require("./templates");
 var fs = require("fs");
 var dialog = require("electron").remote.dialog;
 var Rx = require("rx-lite");
+var $ = require("jquery");
 var Browser = (function () {
     function Browser() {
+        var _this = this;
         this.initialPage = templates_1.initialPage;
         this.resultsPage = templates_1.resultsPage;
-        this.setInitialPage();
+        this.setPage(templates_1.initialPage);
         this.getDataObservable().subscribe(function (data) {
-            alert((new app_1.App(data)).getDesiredPrice());
-        }, function (err) { alert("Aww fuck!"); });
+            var app = new app_1.App(data);
+            _this.setPage(templates_1.resultsPage);
+            var element = document.getElementById("results");
+            var results = app.getResults();
+            results.forEach(function (combo) {
+                $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
+                combo.forEach(function (sentence) {
+                    $(".entry").last().append("<li>" + sentence + "</li>");
+                });
+            });
+        }, function (err) { alert("There has been an error."); });
     }
     Browser.prototype.getDataObservable = function () {
         var button = document.getElementById("openFile");
@@ -30,8 +41,9 @@ var Browser = (function () {
             alert("Invalid data."); })
             .filter(function (d) { return parser_1.Parser.validateData(d); });
     };
-    Browser.prototype.setInitialPage = function () {
-        document.getElementById("content").innerHTML = this.initialPage;
+    Browser.prototype.setPage = function (page) {
+        $("#content").empty();
+        $("#content").append(page);
     };
     Browser.prototype.displayResults = function (app) {
         document.getElementById("content").innerHTML = this.resultsPage;
