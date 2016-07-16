@@ -25,4 +25,7 @@ describe("parser", function () {
         var p = new parser_1.Parser(data);
         expect(p.getParserResults().foodEntries).toEqual(expectedResults);
     });
+    it("can validate data", function () {
+        expect(parser_1.Parser.validateData(testData)).toBe(true);
+    });
 });

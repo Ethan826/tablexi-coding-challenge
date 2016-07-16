@@ -16,6 +16,10 @@ export class Parser {
     return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
   }
 
+  static validateData(data) {
+    return /\$(\d+)?\.\d{2}(\n((\w| )+),\$(\d+)?\.\d{2})+/.test(data);
+  }
+
   private getLines(): List<string> {
     return List(this.data.split("\n").filter(s => s && s.length > 0));
   }

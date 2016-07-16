@@ -7,6 +7,7 @@ import fs = require("fs");
 
 
 describe("parser", () => {
+
   let testData = `$15.05
 mixed fruit,$2.15
 french fries,$2.75
@@ -40,5 +41,9 @@ sampler plate,$5.80`;
     let data = fs.readFileSync("./spec/helpers/menu.txt", "utf-8");
     let p = new Parser(data);
     expect(p.getParserResults().foodEntries).toEqual(expectedResults)
+  });
+
+  it("can validate data", () => {
+    expect(Parser.validateData(testData)).toBe(true);
   });
 });

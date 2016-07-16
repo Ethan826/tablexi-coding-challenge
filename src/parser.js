@@ -10,6 +10,9 @@ var Parser = (function () {
     Parser.prototype.getParserResults = function () {
         return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
     };
+    Parser.validateData = function (data) {
+        return /\$(\d+)?\.\d{2}(\n((\w| )+),\$(\d+)?\.\d{2})+/.test(data);
+    };
     Parser.prototype.getLines = function () {
         return immutable_1.List(this.data.split("\n").filter(function (s) { return s && s.length > 0; }));
     };
