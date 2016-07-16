@@ -11,16 +11,21 @@ import {initialPage} from "./templates";
 export class Browser {
   private initialPage: string;
   private resultsPage: string;
-  private clickListener: Rx.Observable<EventListener>;
+  private clickListener: Rx.Observable<any>;
   private fileData: Rx.Observable<string>;
-  private app: Promise<App>;
+  private app: Rx.Observable<App>;
 
   constructor() {
     this.initialPage = initialPage;
     this.setInitialPage();
     this.clickListener = this.setClickListener();
     this.fileData = this.getFileData();
-    this.fileData.subscribe(x => console.log(x));
+    this.app = this.fileData.map(data => new App(data));
+    this.app.subscribe(app => console.log(app.getDesiredPrice()));
+    // this.instantiateApp().subscribe(app => {
+    //   console.log(app);
+    // });
+    // this.app = this.instantiateApp().subscribe();
     // this.fileData.then(() => console.log("Foo"));
     // this.fileData = this.getFileData();
     // this.app = this.fileData.then(data => this.instantiateApp());
@@ -36,24 +41,16 @@ export class Browser {
   }
 
   private getFileData(): Rx.Observable<string> {
-    return this.clickListener.map(() => {
+    return this.clickListener.flatMap(() => {
       let f = dialog.showOpenDialog({ properties: ["openFile"] });
       let read = Rx.Observable.fromCallback(fs.readFile);
-      return read(f[0], "utf-8");
+      return read(f[0], "utf-8").map(result => result[1]);
     });
   }
 
-  // private instantiateApp(): Promise<App> {
-  //   return new Promise((res: Function, rej: Function) => {
-  //     fs.readFile(f[0], "utf-8", (readErr, data) => {
-  //       if (readErr) rej(readErr);
-  //       if (!data) rej(new Error(`Error reading ${f[0]}`));
-  //       try {
-  //         res(new App(data));
-  //       } catch (appErr) {
-  //         rej(appErr);
-  //       }
-  //     });
+  // private instantiateApp(): Rx.Observable<App> {
+  //   return this.fileData.map(data => {
+  //     return new App(data);
   //   });
   // }
 }

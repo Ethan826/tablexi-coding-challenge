@@ -17,6 +17,7 @@ export class Parser {
   }
 
   private getLines(): List<string> {
+    console.log(this.data);
     return List(this.data.split("\n").filter(s => s && s.length > 0));
   }
 
