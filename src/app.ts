@@ -27,4 +27,8 @@ export class App {
   getResults(): Set<Set<string>> {
     return this.results;
   }
+
+  getDesiredPrice() {
+    return this.desiredPrice;
+  }
 }

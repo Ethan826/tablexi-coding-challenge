@@ -38,12 +38,16 @@ export class Formatter {
         );
         let fullSentence = partialSentence.zipWith(
           (partial, price) => {
-            return `${partial} (at $${(price / 100).toFixed(2)} each.)`;
+            return `${partial} (at $${Formatter.formatCurrency(price)} each).`;
           },
           prices
         ).toSet();
         return accum.add(fullSentence);
       }, Set());
+  }
+
+  static formatCurrency(pennies) {
+    return (pennies / 100).toFixed(2);
   }
 
   private frequencies(list: any): any {

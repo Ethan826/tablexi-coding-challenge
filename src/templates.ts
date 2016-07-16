@@ -25,6 +25,7 @@ Do not insert spaces except within the food name.
 
 export const resultsPage = `
 <h3>Results</h3>
+<h4>Given your budget of $<span id="budget"></span>&hellip;</h4>
 <ul id="results" class="list-group">
 </ul>
 `;

@@ -26,10 +26,13 @@ var Formatter = (function () {
             var foods = prices.map(function (price) { return _this.priceMapWithCombinedFoods.get(price); });
             var partialSentence = freqs.zipWith(function (freq, food) { return freq + " order(s) of " + food; }, foods);
             var fullSentence = partialSentence.zipWith(function (partial, price) {
-                return partial + " (at $" + (price / 100).toFixed(2) + " each.)";
+                return partial + " (at $" + Formatter.formatCurrency(price) + " each).";
             }, prices).toSet();
             return accum.add(fullSentence);
         }, immutable_1.Set());
+    };
+    Formatter.formatCurrency = function (pennies) {
+        return (pennies / 100).toFixed(2);
     };
     Formatter.prototype.frequencies = function (list) {
         return list.reduce(function (accum, el) {

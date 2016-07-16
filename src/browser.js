@@ -1,6 +1,7 @@
 "use strict";
 var app_1 = require("./app");
 var parser_1 = require("./parser");
+var formatter_1 = require("./formatter");
 var templates_1 = require("./templates");
 var fs = require("fs");
 var dialog = require("electron").remote.dialog;
@@ -15,14 +16,7 @@ var Browser = (function () {
         this.getDataObservable().subscribe(function (data) {
             var app = new app_1.App(data);
             _this.setPage(templates_1.resultsPage);
-            var element = document.getElementById("results");
-            var results = app.getResults();
-            results.forEach(function (combo) {
-                $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
-                combo.forEach(function (sentence) {
-                    $(".entry").last().append("<li>" + sentence + "</li>");
-                });
-            });
+            _this.populateResultsPage(app.getDesiredPrice(), app.getResults());
         }, function (err) { alert("There has been an error."); });
     }
     Browser.prototype.getDataObservable = function () {
@@ -45,8 +39,14 @@ var Browser = (function () {
         $("#content").empty();
         $("#content").append(page);
     };
-    Browser.prototype.displayResults = function (app) {
-        document.getElementById("content").innerHTML = this.resultsPage;
+    Browser.prototype.populateResultsPage = function (desiredPrice, results) {
+        $("#budget").append("" + formatter_1.Formatter.formatCurrency(desiredPrice));
+        results.forEach(function (combo) {
+            $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
+            combo.forEach(function (sentence) {
+                $(".entry").last().append("<li class=\"list-unstyled food\">" + sentence + "</li>");
+            });
+        });
     };
     return Browser;
 }());

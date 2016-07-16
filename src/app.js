@@ -15,6 +15,9 @@ var App = (function () {
     App.prototype.getResults = function () {
         return this.results;
     };
+    App.prototype.getDesiredPrice = function () {
+        return this.desiredPrice;
+    };
     return App;
 }());
 exports.App = App;

@@ -2,8 +2,10 @@
 
 import {App} from "./app";
 import {Parser} from "./parser";
+import {Formatter} from "./formatter";
 import {initialPage, resultsPage} from "./templates";
 
+import {Set} from "immutable";
 import fs = require("fs");
 const {dialog} = require("electron").remote;
 const Rx = require("rx-lite");
@@ -25,14 +27,7 @@ export class Browser {
       (data) => {
         let app = new App(data);
         this.setPage(resultsPage);
-        let element = document.getElementById("results");
-        let results = app.getResults();
-        results.forEach((combo) => {
-          $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
-          combo.forEach((sentence) => {
-            $(".entry").last().append(`<li>${sentence}</li>`);
-          });
-        });
+        this.populateResultsPage(app.getDesiredPrice(), app.getResults());
       },
       (err) => { alert("There has been an error."); }
     );
@@ -60,7 +55,15 @@ export class Browser {
     $("#content").append(page);
   }
 
-  private displayResults(app: App) {
-    document.getElementById("content").innerHTML = this.resultsPage;
+  private populateResultsPage(desiredPrice: number, results: Set<Set<string>>) {
+    $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
+    results.forEach((combo) => {
+      $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
+      combo.forEach((sentence) => {
+        $(".entry").last().append(`<li class="list-unstyled food">${sentence}</li>`);
+      });
+    });
+
   }
+
 }
