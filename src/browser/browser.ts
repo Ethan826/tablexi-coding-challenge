@@ -44,6 +44,7 @@ export class Browser {
     let click = Rx.Observable.fromEvent(button, "click");
     let opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
     let reader = Rx.Observable.fromCallback(fs.readFile);
+    let isValid: boolean;
 
     // Pipeline of observables to convert a stream of clicks into a stream of
     // file data
@@ -54,8 +55,14 @@ export class Browser {
       .filter(f => f) // Don't emit event if user didn't select a file
       .flatMap(f => reader(f[0], "utf-8")) // map filename stream to file data stream
       .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData]
-      .do(d => { if (!Parser.validateData(d)) alert("Invalid data."); })
-      .filter(d => Parser.validateData(d));
+      .do(d => {
+
+        // Save validity info to outer scope to communicate to .filter() and;
+        // otherwise .filter() has to re-run validateData().
+        isValid = Parser.validateData(d);
+        if (!isValid) alert("Invalid data");
+      })
+      .filter(() => isValid);
   }
 
   private setPage(page: string) {

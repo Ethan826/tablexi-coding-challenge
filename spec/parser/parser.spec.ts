@@ -33,8 +33,6 @@ sampler plate,$5.80`;
 
   it("can create Set of food items from test data", () => {
     let p = new Parser(testData);
-    console.log(p.getParserResults().foodEntries);
-    console.log(expectedResults);
     expect(p.getParserResults().foodEntries.equals(expectedResults)).toEqual(true);
   });
 

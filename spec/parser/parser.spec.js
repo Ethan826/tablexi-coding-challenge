@@ -11,8 +11,6 @@ describe("parser", function () {
     });
     it("can create Set of food items from test data", function () {
         var p = new parser_1.Parser(testData);
-        console.log(p.getParserResults().foodEntries);
-        console.log(expectedResults);
         expect(p.getParserResults().foodEntries.equals(expectedResults)).toEqual(true);
     });
     it("can parse imported data", function () {

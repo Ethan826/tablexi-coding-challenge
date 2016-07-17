@@ -24,6 +24,7 @@ var Browser = (function () {
         var click = Rx.Observable.fromEvent(button, "click");
         var opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
         var reader = Rx.Observable.fromCallback(fs.readFile);
+        var isValid;
         return click
             .flatMap(function () {
             return opener({ properties: ["openFile"] });
@@ -31,9 +32,12 @@ var Browser = (function () {
             .filter(function (f) { return f; })
             .flatMap(function (f) { return reader(f[0], "utf-8"); })
             .map(function (d) { return d[1]; })
-            .do(function (d) { if (!parser_1.Parser.validateData(d))
-            alert("Invalid data."); })
-            .filter(function (d) { return parser_1.Parser.validateData(d); });
+            .do(function (d) {
+            isValid = parser_1.Parser.validateData(d);
+            if (!isValid)
+                alert("Invalid data");
+        })
+            .filter(function () { return isValid; });
     };
     Browser.prototype.setPage = function (page) {
         $("#content").empty();
