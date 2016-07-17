@@ -24,7 +24,7 @@ var Formatter = (function () {
             var prices = el.keySeq();
             var freqs = el.valueSeq();
             var foods = prices.map(function (price) { return _this.priceMapWithCombinedFoods.get(price); });
-            var partialSentence = freqs.zipWith(function (freq, food) { return freq + " order(s) of " + food; }, foods);
+            var partialSentence = freqs.zipWith(function (freq, food) { return freq + " order" + (freq > 1 ? "s" : "") + " of " + food; }, foods);
             var fullSentence = partialSentence.zipWith(function (partial, price) {
                 return partial + " (at $" + Formatter.formatCurrency(price) + " each).";
             }, prices).toSet();

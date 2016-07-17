@@ -8,11 +8,11 @@ describe("formatter", function () {
         immutable_1.List([215, 355, 355, 580])
     ]);
     var expectedResult = immutable_1.Set([
-        immutable_1.Set(["7 order(s) of mixed fruit (at $2.15 each.)"]),
+        immutable_1.Set(["7 orders of mixed fruit (at $2.15 each)."]),
         immutable_1.Set([
-            "1 order(s) of mixed fruit (at $2.15 each.)",
-            "2 order(s) of hot wings (at $3.55 each.)",
-            "1 order(s) of sampler plate (at $5.80 each.)"
+            "1 order of mixed fruit (at $2.15 each).",
+            "2 orders of hot wings (at $3.55 each).",
+            "1 order of sampler plate (at $5.80 each)."
         ])
     ]);
     it("properly formats the supplied data", function () {

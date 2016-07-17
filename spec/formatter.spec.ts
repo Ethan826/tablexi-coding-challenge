@@ -19,11 +19,11 @@ describe("formatter", () => {
   ]);
 
   let expectedResult = Set([
-    Set(["7 order(s) of mixed fruit (at $2.15 each.)"]),
+    Set(["7 orders of mixed fruit (at $2.15 each)."]),
     Set([
-      "1 order(s) of mixed fruit (at $2.15 each.)",
-      "2 order(s) of hot wings (at $3.55 each.)",
-      "1 order(s) of sampler plate (at $5.80 each.)"
+      "1 order of mixed fruit (at $2.15 each).",
+      "2 orders of hot wings (at $3.55 each).",
+      "1 order of sampler plate (at $5.80 each)."
     ])
   ]);
 

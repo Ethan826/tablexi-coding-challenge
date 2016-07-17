@@ -33,7 +33,7 @@ export class Formatter {
         let freqs = el.valueSeq();
         let foods = prices.map(price => this.priceMapWithCombinedFoods.get(price));
         let partialSentence = freqs.zipWith(
-          (freq, food) => { return `${freq} order(s) of ${food}`; },
+          (freq: number, food) => { return `${freq} order${freq > 1 ? "s" : ""} of ${food}`; },
           foods
         );
         let fullSentence = partialSentence.zipWith(
