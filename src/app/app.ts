@@ -16,7 +16,7 @@ export class App {
   constructor(data: string) {
     let parserResults = (new Parser(data)).getParserResults();
     this.desiredPrice = parserResults.desiredPrice;
-    this.priceMap = MapMaker.makeMap(parserResults.foodEntries);
+    this.priceMap = parserResults.foodEntries;
     this.priceCombinations = Knapsack.compute(
       this.priceMap.keySeq().toSet(), // Set of unique prices
       this.desiredPrice

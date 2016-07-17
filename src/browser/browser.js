@@ -31,14 +31,9 @@ var Browser = (function () {
             .filter(function (f) { return f; })
             .flatMap(function (f) { return reader(f[0], "utf-8"); })
             .map(function (d) { return d[1]; })
-            .flatMap(function (d) {
-            if (parser_1.Parser.validateData(d)) {
-                return Rx.Observable.just(d);
-            }
-            else {
-                alert("Invalid data.");
-            }
-        });
+            .do(function (d) { if (!parser_1.Parser.validateData(d))
+            alert("Invalid data."); })
+            .filter(function (d) { return parser_1.Parser.validateData(d); });
     };
     Browser.prototype.setPage = function (page) {
         $("#content").empty();

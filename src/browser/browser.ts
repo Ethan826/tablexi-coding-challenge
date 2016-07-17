@@ -54,13 +54,8 @@ export class Browser {
       .filter(f => f) // Don't emit event if user didn't select a file
       .flatMap(f => reader(f[0], "utf-8")) // map filename stream to file data stream
       .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData]
-      .flatMap((d) => {
-        if (Parser.validateData(d)) { // validate data
-          return Rx.Observable.just(d); // if it's valid, emit it
-        } else {
-          alert("Invalid data."); // if it's invalid, filter it out and alert
-        }
-      });
+      .do(d => { if (!Parser.validateData(d)) alert("Invalid data."); })
+      .filter(d => Parser.validateData(d));
   }
 
   private setPage(page: string) {
@@ -79,7 +74,7 @@ export class Browser {
           There is no combination of foods that satisfy your budget.
         </div>
       `);
-    // Else loop over results to populate list
+      // Else loop over results to populate list
     } else {
 
       // Each combo of results

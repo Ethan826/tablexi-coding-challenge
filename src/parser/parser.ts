@@ -5,7 +5,7 @@ export class Parser {
   private data: string;
   private lines: List<string>;
   private desiredPrice: number;
-  private foodEntries: Set<FoodEntry>;
+  private foodEntries: Map<number, Set<string>>;
 
   constructor(data: string) {
     this.data = data.trim();
@@ -37,20 +37,24 @@ export class Parser {
   }
 
   private getDesiredPrice(): number {
-    return this.parseOneLine(this.lines.get(0)).price;
+    return this.integerifyCash(this.lines.get(0).match(/(?:\$)(.*)/)[1]);
   }
 
-  private getFoodEntries(): Set<FoodEntry> {
+  private getFoodEntries(): Map<number, Set<string>> {
     return this.lines
-      .slice(1)
-      .reduce((accum: List<FoodEntry>, el: string): List<FoodEntry> => {
-        return accum.push(this.parseOneLine(el));
-      }, List()).toSet() as any;
+      .slice(1) // the first line is the desired price
+      .reduce(
+      (accum: Map<number, Set<string>>, el: string): Map<number, Set<string>> => {
+        let newEntry = this.parseOneLine(el);
+        return accum.mergeWith((oldVal, newVal) => {
+          return oldVal.concat(newVal);
+        }, newEntry);
+      }, Map());
   }
 
-  private parseOneLine(line: string): FoodEntry {
+  private parseOneLine(line: string): Map<number, string> {
     let match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
-    return { food: match[1].trim(), price: this.integerifyCash(match[2]) };
+    return Map.of(this.integerifyCash(match[2]), Set([match[1].trim()]));
   }
 
   private integerifyCash(num: string): number {
