@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 import {App} from "./app";
 import {Parser} from "./parser";

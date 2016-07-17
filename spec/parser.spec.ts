@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 import {Parser} from "../src/parser";
 import {Set} from "immutable";

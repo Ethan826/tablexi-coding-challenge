@@ -1,6 +1,6 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
-import {App} from "../../src/ts/app";
+import {App} from "../src/app";
 import {Set, Map, List} from "immutable";
 import fs = require("fs");
 

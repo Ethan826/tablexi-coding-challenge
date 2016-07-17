@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 import {MapMaker} from "../src/mapMaker";
 import {Map, Set} from "immutable";

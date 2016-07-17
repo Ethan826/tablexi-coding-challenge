@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 import {Formatter} from "../src/formatter";
 import {Set, Map, List} from "immutable";

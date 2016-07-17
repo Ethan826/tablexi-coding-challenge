@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
 import {FoodEntry} from "./interfaces";
