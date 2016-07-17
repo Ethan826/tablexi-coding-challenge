@@ -108,7 +108,7 @@ sources of UI, for example. See my project
 [here](https://github.com/Ethan826/tic-tac-toe_coding_challenge) for how
 I would approach that kind of implementation.
 
-Once Electron cranks up, it calls `Browser`, controls the view and
+Once Electron cranks up, it calls `Browser`, which controls the view and
 handles UI. Once `Browser` has valid data, it instantiates `App`. `App`
 instantiates `Parser`, passing in the data `Browser` handed off
 (`Browser` validated the data by calling the static `validateData`
@@ -116,7 +116,9 @@ method from `Parser`). `Parser`’s constructor manipulates the data and
 stores it in a `desiredPrice` (a `number`) and `priceMap`, an
 `Immutable.Map` with prices as keys and an `Immutable.Set` of strings as
 values, with each string containing the name of one food whose price
-equals the key.
+equals the key. For example, `{215: ["pigeon remoulade", "mixed fruit"]}`.
+(Note that numbers are stored internally as an integer representing pennies
+to avoid problems with floats. I saw a [video](http://www.tablexi.com/developers/money-in-ruby/) about this somewhere.)
 
 Now, `App` requests `desiredPrice` and `priceMap` from `Parser`. `App`
 then calls the static method `Backpack.compute`, passing in an
