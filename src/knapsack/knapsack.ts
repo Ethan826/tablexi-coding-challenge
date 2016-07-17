@@ -1,7 +1,6 @@
 /// <reference path="../../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
-import {FoodEntry} from "../interfaces/interfaces";
 
 export class Knapsack {
   static compute(

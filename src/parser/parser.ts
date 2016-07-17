@@ -1,5 +1,9 @@
 import {List, Set, Map} from "immutable";
-import {FoodEntry, ParserResults} from "../interfaces/interfaces";
+
+export interface ParserResults {
+  desiredPrice: number;
+  foodEntries: Map<number, Set<string>>;
+}
 
 export class Parser {
   private data: string;
@@ -11,7 +15,7 @@ export class Parser {
     this.data = data.trim();
     let errorString = "Invalid Data";
     if (!Parser.validateData(data)) throw errorString;
-    try { // Defend against validateData function missing something.
+    try { // Defend against oversights in validateData function
       this.lines = this.getLines();
       this.desiredPrice = this.getDesiredPrice();
       this.foodEntries = this.getFoodEntries();
@@ -20,11 +24,11 @@ export class Parser {
     }
   }
 
-  getParserResults() {
+  getParserResults(): ParserResults {
     return { desiredPrice: this.desiredPrice, foodEntries: this.foodEntries };
   }
 
-  static validateData(data) {
+  static validateData(data): boolean {
     try {
       return / *\$(\d+)?\.\d{2} *(( *\n)*(\w| )+, *\$(\d+)?\.\d+ *)+/.test(data);
     } catch (_) { // Data is definitely bad if validator doesn't run
@@ -41,15 +45,21 @@ export class Parser {
   }
 
   private getFoodEntries(): Map<number, Set<string>> {
+    // Reduce over the second through last line, converting the string into a
+    // Map of {price: ["set", "of", "foods", "at", "that", "price"]}
     return this.lines
       .slice(1) // the first line is the desired price
       .reduce(
-      (accum: Map<number, Set<string>>, el: string): Map<number, Set<string>> => {
+      (accum, el: string): Map<number, Set<string>> => {
         let newEntry = this.parseOneLine(el);
+
+        // Merge with calls the passed-in function if there is a collision
+        // between keys. Here, if the keys collide, we know we must concat the
+        // food name to the list of food names already at that price.
         return accum.mergeWith((oldVal, newVal) => {
           return oldVal.concat(newVal);
         }, newEntry);
-      }, Map());
+      }, Map()) as Map<number, Set<string>>;
   }
 
   private parseOneLine(line: string): Map<number, string> {

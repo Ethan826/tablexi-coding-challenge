@@ -1,6 +1,5 @@
 import {List, Map, Set} from "immutable";
 import {Parser} from "../parser/parser";
-import {ParserResults, FoodEntry} from "../interfaces/interfaces";
 import {MapMaker} from "../mapMaker/mapMaker";
 import {Knapsack} from "../knapsack/knapsack";
 import {Browser} from "../browser/browser";
