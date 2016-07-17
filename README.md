@@ -6,11 +6,12 @@ Clone the repository to your machine. Install the dependencies with
 the TypeScript files). Run the app with `npm start` You can package the
 app with
 [electron-packager](https://github.com/electron-userland/electron-packager).
+To run the tests, run `jasmine`.
 
 Description
 ===========
 
-Recursive algorithm
+Knapsack algorithm
 -------------------
 
 The core of the application is the function `Knapsack.compute`. The
@@ -145,7 +146,8 @@ click on the `Select File` button. That event listener triggers
 launching the file open dialog window, which delivers the filename to a
 callback. It is then necessary to validate the data in the file before
 instantiating the `App` class with the data. If the data is invalid, it
-is necessary to react to another click and launch another dialog window. Thus, we are already in this situation:
+is necessary to listen for another click and launch another dialog
+window. Thus, we are already in this situation:
 
     $("#openFile").click(() => {
       dialog.showOpenDialog( { properties: ["openFile"] }, (filename) => {
@@ -158,3 +160,13 @@ is necessary to react to another click and launch another dialog window. Thus, w
         });
       });
     });
+
+Instead, we can pipeline a stream of clicks into a stream of validated
+file data. By subscribing to that stream, we can do this:
+
+    dataObservable.subscribe(
+      (data) => { /* Instantiate app, display results */ }, 
+      (err) => { /* Do something else */ }
+    );
+
+and deal with getting the dataObservable set up elsewhere.

@@ -39,9 +39,7 @@ export class Browser {
   }
 
   private getDataObservable() {
-    let button = document.getElementById("openFile");
-
-    let click = Rx.Observable.fromEvent(button, "click");
+    let click = Rx.Observable.fromEvent($("#openFile"), "click");
     let opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
     let reader = Rx.Observable.fromCallback(fs.readFile);
     let isValid: boolean;

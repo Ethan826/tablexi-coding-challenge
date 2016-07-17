@@ -20,8 +20,7 @@ var Browser = (function () {
         }, function (err) { alert("There has been an error."); });
     }
     Browser.prototype.getDataObservable = function () {
-        var button = document.getElementById("openFile");
-        var click = Rx.Observable.fromEvent(button, "click");
+        var click = Rx.Observable.fromEvent($("#openFile"), "click");
         var opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
         var reader = Rx.Observable.fromCallback(fs.readFile);
         var isValid;
