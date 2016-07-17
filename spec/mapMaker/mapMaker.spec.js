@@ -1,5 +1,5 @@
 "use strict";
-var mapMaker_1 = require("../src/mapMaker");
+var mapMaker_1 = require("../../src/mapMaker/mapMaker");
 var immutable_1 = require("immutable");
 describe("MapMaker", function () {
     var testData = immutable_1.Set([

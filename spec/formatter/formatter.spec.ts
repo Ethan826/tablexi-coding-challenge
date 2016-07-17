@@ -1,6 +1,6 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
-import {Formatter} from "../src/formatter";
+import {Formatter} from "../../src/formatter/formatter";
 import {Set, Map, List} from "immutable";
 
 describe("formatter", () => {

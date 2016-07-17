@@ -1,5 +1,5 @@
 "use strict";
-var knapsack_1 = require("../src/knapsack");
+var knapsack_1 = require("../../src/knapsack/knapsack");
 var immutable_1 = require("immutable");
 describe("knapsack", function () {
     var expectedResultGiven = immutable_1.Set([

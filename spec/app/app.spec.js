@@ -1,5 +1,5 @@
 "use strict";
-var app_1 = require("../src/app");
+var app_1 = require("../../src/app/app");
 var immutable_1 = require("immutable");
 var fs = require("fs");
 describe("app data parsing", function () {

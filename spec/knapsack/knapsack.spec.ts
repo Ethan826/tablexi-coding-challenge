@@ -1,7 +1,7 @@
-/// <reference path="../typings/index.d.ts"/>
-import {Knapsack} from "../src/knapsack";
+/// <reference path="../../typings/index.d.ts"/>
+import {Knapsack} from "../../src/knapsack/knapsack";
+import {FoodEntry} from "../../src/interfaces/interfaces";
 import {List, Set} from "immutable";
-import {FoodEntry} from "../src/interfaces";
 
 describe("knapsack", () => {
   let expectedResultGiven = Set([

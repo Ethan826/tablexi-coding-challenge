@@ -1,6 +1,6 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
-import {Parser} from "../src/parser";
+import {Parser} from "../../src/parser/parser";
 import {Set} from "immutable";
 
 import fs = require("fs");

@@ -1,5 +1,5 @@
 "use strict";
-var parser_1 = require("../src/parser");
+var parser_1 = require("../../src/parser/parser");
 var immutable_1 = require("immutable");
 var fs = require("fs");
 describe("parser", function () {
