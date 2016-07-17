@@ -30,7 +30,6 @@ describe("formatter", () => {
 
   it("properly formats the supplied data", () => {
     let f = new Formatter(priceMap, priceCombinations);
-    expect(f.makeSentences().equals(expectedResult)).toBe(true);
-    expect(f.makeSentences().equals(Set([Set(["foo"])]))).toBe(false);
+    expect(f.getSentences().equals(expectedResult)).toBe(true);
   });
 });

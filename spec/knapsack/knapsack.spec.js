@@ -20,7 +20,7 @@ describe("knapsack", function () {
     it("finds no results when supplied problem is altered", function () {
         expect(knapsack_1.Knapsack.compute(immutable_1.Set([225, 355, 580]), 1505)).not.toEqual(expectedResultGiven);
     });
-    it("corretly computes additional data", function () {
+    it("correctly computes additional data", function () {
         (function () {
             var expectedResult = immutable_1.Set([immutable_1.List([2, 2, 2]), immutable_1.List([3, 3]), immutable_1.List([2, 4])]);
             expect(knapsack_1.Knapsack.compute(immutable_1.Set([2, 3, 4]), 6)).toEqual(expectedResult);

@@ -18,7 +18,6 @@ describe("formatter", function () {
     ]);
     it("properly formats the supplied data", function () {
         var f = new formatter_1.Formatter(priceMap, priceCombinations);
-        expect(f.makeSentences().equals(expectedResult)).toBe(true);
-        expect(f.makeSentences().equals(immutable_1.Set([immutable_1.Set(["foo"])]))).toBe(false);
+        expect(f.getSentences().equals(expectedResult)).toBe(true);
     });
 });

@@ -29,7 +29,8 @@ export class Parser {
   }
 
   static validateData(data): boolean {
-    try {
+    //                 Blank lines vvvvv |     Price vvvvvvvvvv|
+    try { //   vvv First row vvv|        |vv food vv|          |vv Trailing blank
       return / *\$(\d+)?\.\d{2} *(( *\n)*(\w| )+, *\$(\d+)?\.\d+ *)+/.test(data);
     } catch (_) { // Data is definitely bad if validator doesn't run
       return false;
@@ -37,25 +38,34 @@ export class Parser {
   }
 
   private getLines(): List<string> {
+    // Split the text into a List split on newlines, remove empty strings
     return List(this.data.split("\n").filter(s => s && s.length > 0));
   }
 
   private getDesiredPrice(): number {
-    return this.integerifyCash(this.lines.get(0).match(/(?:\$)(.*)/)[1]);
+    return this.integerifyCash(
+      this.lines
+        .get(0) // First line contains the desiredPrice
+        .match(/(?:\$)(\S*)/)[1] // Match non-space characters after dollar sign
+    );
   }
 
   private getFoodEntries(): Map<number, Set<string>> {
     // Reduce over the second through last line, converting the string into a
     // Map of {price: ["set", "of", "foods", "at", "that", "price"]}
     return this.lines
-      .slice(1) // the first line is the desired price
+      .slice(1) // drop the first line, which contains desiredPrice
       .reduce(
       (accum, el: string): Map<number, Set<string>> => {
+
+        // parseOneLine returns a single-entry Map. {price: ["food", "food"]}.
         let newEntry = this.parseOneLine(el);
 
-        // Merge with calls the passed-in function if there is a collision
-        // between keys. Here, if the keys collide, we know we must concat the
-        // food name to the list of food names already at that price.
+        // mergeWith merges two maps. If there is a collision between keys, it
+        // calls the passed-in function, and sets the value at that key
+        // as the value returned from the lambda. Here, if the keys collide, we
+        // know we must concat the food name to the list of food names already
+        // at that price.
         return accum.mergeWith((oldVal, newVal) => {
           return oldVal.concat(newVal);
         }, newEntry);
@@ -63,7 +73,8 @@ export class Parser {
   }
 
   private parseOneLine(line: string): Map<number, string> {
-    let match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
+    //                 food name vvvvv|comma|v$v|vvvvv price
+    let match = line.match(/((?:\w| )+)(?:,)(?:\$)(.*)/);
     return Map.of(this.integerifyCash(match[2]), Set([match[1].trim()]));
   }
 

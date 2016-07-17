@@ -22,7 +22,7 @@ export class Browser {
   private appObserver: Rx.Observable<App>;
 
   constructor() {
-    this.initialPage = initialPage;
+    this.initialPage = initialPage; // Close over to export
     this.resultsPage = resultsPage;
     this.setPage(initialPage);
 
@@ -40,27 +40,29 @@ export class Browser {
 
   private getDataObservable() {
     let click = Rx.Observable.fromEvent($("#openFile"), "click");
+
+    // fromCallback() converts a function that takes a callback into a new
+    // function that takes all of the original function's arguments except the
+    // callback
     let opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
     let reader = Rx.Observable.fromCallback(fs.readFile);
     let isValid: boolean;
 
     // Pipeline of observables to convert a stream of clicks into a stream of
-    // file data
+    // validated file data
     return click
-      .flatMap(() => { // stream of clicks
-        return opener({ properties: ["openFile"] }); // returns the selected filename (as one-item array)
-      })
+      .flatMap(() => opener({ properties: ["openFile"] }) // returns the selected filename (as one-item array)
       .filter(f => f) // Don't emit event if user didn't select a file
       .flatMap(f => reader(f[0], "utf-8")) // map filename stream to file data stream
       .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData]
       .do(d => {
 
-        // Save validity info to outer scope to communicate to .filter() and;
-        // otherwise .filter() has to re-run validateData().
+        // Save validity info to outer scope to communicate to .filter().
+        // Otherwise .filter() has to re-run validateData().
         isValid = Parser.validateData(d);
         if (!isValid) alert("Invalid data");
       })
-      .filter(() => isValid);
+      .filter(() => isValid)); // Do not allow invalid data out
   }
 
   private setPage(page: string) {
@@ -92,7 +94,5 @@ export class Browser {
         });
       });
     }
-
   }
-
 }

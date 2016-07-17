@@ -19,9 +19,9 @@ function takes two arguments: an Immutable.Set of numbers corresponding
 to menu prices and a number corresponding to the budget / target price.
 
 This could be refactored less cleanly to use ES6 tail call optimization,
-but (1) TCO is not implemented in any of the polyfills or transpilers,
-see <https://goo.gl/XlWN3G>, and (2) we run into time issues before any
-stack overflows.
+but (1) TCO is not implemented in any of the polyfills, see
+[here](https://kangax.github.io/compat-table/es6/), and (2) we run into
+time issues before any stack overflows.
 
 ### Conceptual explanation
 
@@ -131,7 +131,7 @@ contain one combination of prices that add up to the `desiredPrice`.
 `App` next instantiates `Formatter`, passing in `priceMap` and the
 results from `Knapsack.compute`. `Formatter`’s constructor creates an
 `Immutable.Set<Immutable.Set<string>>` of sentences in the form “7
-orders of mixed fruit (at \$2.15 each).” `App` then requests that
+orders of mixed fruit (at $2.15 each).” `App` then requests that
 result.
 
 Finally, `Browser` calls `App`’s `getDesiredPrice` and `getResults`
@@ -250,3 +250,11 @@ I handle invalid data and data that yields no results. I also strip
 leading and trailing whitespace and blank lines. An additional TODO
 might be handling more kinds of malformed data—prices without dollar
 signs, punctuation within the food names, etc.
+
+Any types
+---------
+
+The TypeScript compiler gets confused by Immutable.js data structures in
+some circumstances—particularly when reducing over a collection. Rather
+than fighting the type checker, I have sometimes opted to omit type
+annotations.

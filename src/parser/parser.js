@@ -30,7 +30,9 @@ var Parser = (function () {
         return immutable_1.List(this.data.split("\n").filter(function (s) { return s && s.length > 0; }));
     };
     Parser.prototype.getDesiredPrice = function () {
-        return this.integerifyCash(this.lines.get(0).match(/(?:\$)(.*)/)[1]);
+        return this.integerifyCash(this.lines
+            .get(0)
+            .match(/(?:\$)(\S*)/)[1]);
     };
     Parser.prototype.getFoodEntries = function () {
         var _this = this;
@@ -44,7 +46,7 @@ var Parser = (function () {
         }, immutable_1.Map());
     };
     Parser.prototype.parseOneLine = function (line) {
-        var match = line.match(/(.*?)(?:,)?(?:\$)(.*)/);
+        var match = line.match(/((?:\w| )+)(?:,)(?:\$)(.*)/);
         return immutable_1.Map.of(this.integerifyCash(match[2]), immutable_1.Set([match[1].trim()]));
     };
     Parser.prototype.integerifyCash = function (num) {

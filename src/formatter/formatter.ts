@@ -1,10 +1,5 @@
 import {Map, Set, List, Seq} from "immutable";
 
-/* Note: Immutable.Js and the type checker don't work well together. I have
- * I am using any types throughout because there are several faulty type errors
- * that I cannot find a way to clear even using the as operator.
- */
-
 export class Formatter {
   private priceCombinationsWithFreqs;
   private priceMapWithCombinedFoods;
@@ -34,8 +29,8 @@ export class Formatter {
       .entrySeq() // Returns a list of [key, value] tuples for each Map entry
 
       // Reduce over Seq of [key, value] tuples, outputting the same keys but
-      // converting the values from a Set of items ["food1", "food2"] joined
-      // with " or " to yield "food1 or food2"
+      // converting the values from a Set of items ["food1", "food2"] to a
+      // string joined with " or " to yield "food1 or food2"
       .reduce((accum: Map<number, string>, tuple: Seq<number, Set<string>>) => {
         return accum.set(tuple[0], tuple[1].join(" or "));
       },
@@ -50,12 +45,12 @@ export class Formatter {
     return this.priceCombinationsWithFreqs
       .reduce((accum, el) => {
 
-        /* We begin building each sentence by compiling three lists: prices,
+        /* We begin building each sentence by creating three lists: prices,
          * freqs (how many orders at that price), and foods (the names of all
          * foods at that price, joined by " or "). The values stored at each
          * index of the list correspond to one another, so freqs[0], foods[0]
-         * and prices[0] combine to describe one full sentence (e.g. 7 mixed
-         * fruit at 215).
+         * and prices[0] combine to describe one full sentence (e.g. 7, mixed
+         * fruit, 215).
          */
 
         let prices = el.keySeq(); // the keys are the prices
@@ -67,7 +62,7 @@ export class Formatter {
           .map(price => this.priceMapWithCombinedFoods.get(price));
 
         // Build the first part of the sentence by zipping the freqs list with
-        // the foods list. zipWith zips two lists together, combining the items
+        // the foods list. zipWith interleaves two lists, combining the items
         // of the two lists as specified by the passed-in function.
         let partialSentence = freqs.zipWith((freq, food) => {
           return `${freq} order${freq > 1 ? "s" : ""} of ${food}`; // pluralize order(s) as needed

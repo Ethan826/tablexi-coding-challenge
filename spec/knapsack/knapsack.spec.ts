@@ -27,7 +27,7 @@ describe("knapsack", () => {
     expect(Knapsack.compute(Set([225, 355, 580]), 1505)).not.toEqual(expectedResultGiven);
   });
 
-  it("corretly computes additional data", () => {
+  it("correctly computes additional data", () => {
     // Wrapping in IIFE for namespacing
     (() => {
       let expectedResult = Set([List([2, 2, 2]), List([3, 3]), List([2, 4])]);

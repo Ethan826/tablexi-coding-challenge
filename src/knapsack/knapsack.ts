@@ -12,10 +12,7 @@ export class Knapsack {
 
   static computeHelper(
     prices: List<number> | Set<number>,
-    budget: number): any {
-    // Actual return type is Set<List<number>>; TS and Immutable.js don't play
-    // well together here.
-
+    budget: number): any { // actually Set<List<number>>
     // Base cases
 
     // If there are no prices, there can be no solution. Return null.
@@ -33,13 +30,11 @@ export class Knapsack {
         return null;
       }
 
-      /*
-       * Recursive case. Divide-and-conquer algorithm compiles and filters
-       * results by recurring on each price price, subtracting that price
-       * from the budget and filtering the list of price prices to be less
-       * than or equal to both the new budget and the current price. See
-       * README for additional information.
-       */
+      // Recursive case. Divide-and-conquer algorithm compiles and filters
+      // results by recurring on each price price, subtracting that price
+      // from the budget and filtering the list of price prices to be less
+      // than or equal to both the new budget and the current price. See
+      // README for additional information.
     } else {
       return prices.flatMap((price: number) => {
         let newBudget = budget - price; // If we buy this item, what is our new budget?
@@ -57,12 +52,11 @@ export class Knapsack {
         // Recursive call
         let results = this.computeHelper(newMenuItems as any, newBudget);
 
-        return results // Test if recursion returned a value or null
-
-          // If recursion returned a value, concat the item under consideration and return
+        // If recursion returned results, concat the item under consideration
+        // onto each result and return that. If recursion didn't return results
+        // return null.
+        return results
           ? results.map((e: List<number>) => e.concat(price)).toSet()
-
-          // Otherwise, no results are with this item, so return null
           : null;
       });
     }
