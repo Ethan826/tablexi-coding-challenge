@@ -4,6 +4,10 @@ var Knapsack = (function () {
     function Knapsack() {
     }
     Knapsack.compute = function (prices, budget) {
+        var results = this.computeHelper(prices, budget);
+        return results ? results : immutable_1.Set();
+    };
+    Knapsack.computeHelper = function (prices, budget) {
         var _this = this;
         if (prices.size === 0) {
             return null;
@@ -26,7 +30,7 @@ var Knapsack = (function () {
                 });
                 if (newBudget === 0)
                     return immutable_1.List([immutable_1.List([price])]);
-                var results = _this.compute(newMenuItems, newBudget);
+                var results = _this.computeHelper(newMenuItems, newBudget);
                 return results
                     ? results.map(function (e) { return e.concat(price); }).toList()
                     : null;

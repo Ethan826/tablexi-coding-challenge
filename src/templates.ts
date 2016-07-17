@@ -14,18 +14,17 @@ The data must adhere precisely to this format:
 </table>
 </p>
 <p>
-The desired budget should be listed with a dollar sign on the
-first line; all subsequent lines should correspond to one food
-item with the food item&rsquo;s name, followed by a comma,
-followed by a dollar sign, followed by the item&rsquo;s price.
-Do not insert spaces except within the food name.
+The desired budget should be listed  on the first line; all subsequent lines
+should correspond to one food item with the food item&rsquo;s name, followed by
+a comma, followed by the item&rsquo;s price. Prices must be of the form
+<code>$n.nn</code> (with at least one number before the period).  Food names 
+must contain only letters and spaces.
 </p>
 <hr>
 <button id="openFile" class="btn">Select File</button>`;
 
 export const resultsPage = `
 <h3>Results</h3>
-<h4>Given your budget of $<span id="budget"></span>&hellip;</h4>
-<ul id="results" class="list-group">
-</ul>
+<h4 id="preamble">Given your budget of $<span id="budget"></span>&hellip;</h4>
+<ul id="results" class="list-group"></ul>
 `;

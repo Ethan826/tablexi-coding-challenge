@@ -1,4 +1,4 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
 import {App} from "./app";
 import {Parser} from "./parser";
@@ -57,12 +57,20 @@ export class Browser {
 
   private populateResultsPage(desiredPrice: number, results: Set<Set<string>>) {
     $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
-    results.forEach((combo) => {
-      $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
-      combo.forEach((sentence) => {
-        $(".entry").last().append(`<li class="list-unstyled food">${sentence}</li>`);
+    if (results.isEmpty()) {
+      $("#preamble").append(`
+        <div class="alert alert-danger" id="noresults">
+          There is no combination of foods that satisfy your budget.
+        </div>
+      `);
+    } else {
+      results.forEach((combo) => {
+        $("#results").append(`<li class="list-group-item"><ul class="entry"></ul></li>`);
+        combo.forEach((sentence) => {
+          $(".entry").last().append(`<li class="list-unstyled food">${sentence}</li>`);
+        });
       });
-    });
+    }
 
   }
 

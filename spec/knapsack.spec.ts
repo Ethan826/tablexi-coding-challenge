@@ -1,4 +1,4 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 import {Knapsack} from "../src/knapsack";
 import {List, Set} from "immutable";
 import {FoodEntry} from "../src/interfaces";

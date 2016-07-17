@@ -1,10 +1,17 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
 import {FoodEntry} from "./interfaces";
 
 export class Knapsack {
   static compute(
+    prices: List<number> | Set<number>,
+    budget: number): any {
+    let results = this.computeHelper(prices, budget);
+    return results ? results : Set();
+  }
+
+  static computeHelper(
     prices: List<number> | Set<number>,
     budget: number): any {
     // Actual return type is Set<List<number>>; TS and Immutable.js don't play
@@ -42,7 +49,7 @@ export class Knapsack {
           return c <= priceCeiling;
         }); // help the type checker
         if (newBudget === 0) return List([List([price])]);
-        let results = this.compute(newMenuItems as any, newBudget);
+        let results = this.computeHelper(newMenuItems as any, newBudget);
         return results
           ? results.map((e: List<number>) => e.concat(price)).toList()
           : null;

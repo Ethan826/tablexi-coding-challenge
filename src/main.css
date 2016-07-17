@@ -5,3 +5,7 @@ p {
 .entry {
   padding-left: 0;
 }
+
+#noresults {
+  margin-top: 1.2em;
+}

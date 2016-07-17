@@ -41,12 +41,17 @@ var Browser = (function () {
     };
     Browser.prototype.populateResultsPage = function (desiredPrice, results) {
         $("#budget").append("" + formatter_1.Formatter.formatCurrency(desiredPrice));
-        results.forEach(function (combo) {
-            $("#results").append("<li class='list-group-item'><ul class='entry'></ul></li>");
-            combo.forEach(function (sentence) {
-                $(".entry").last().append("<li class=\"list-unstyled food\">" + sentence + "</li>");
+        if (results.isEmpty()) {
+            $("#preamble").append("\n        <div class=\"alert alert-danger\" id=\"noresults\">\n          There is no combination of foods that satisfy your budget.\n        </div>\n      ");
+        }
+        else {
+            results.forEach(function (combo) {
+                $("#results").append("<li class=\"list-group-item\"><ul class=\"entry\"></ul></li>");
+                combo.forEach(function (sentence) {
+                    $(".entry").last().append("<li class=\"list-unstyled food\">" + sentence + "</li>");
+                });
             });
-        });
+        }
     };
     return Browser;
 }());

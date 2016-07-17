@@ -4,9 +4,10 @@ var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var mainWindow;
 function createWindow() {
-    mainWindow = new BrowserWindow({ width: 800, height: 500 });
+    mainWindow = new BrowserWindow({ width: 800, height: 525 });
     mainWindow.setMenu(null);
     mainWindow.loadURL("file://" + __dirname + "/index.html");
+    mainWindow.webContents.openDevTools();
     mainWindow.on("closed", function () {
         mainWindow = null;
     });

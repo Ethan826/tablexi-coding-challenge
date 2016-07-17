@@ -2,14 +2,22 @@ import {List, Set, Map} from "immutable";
 import {FoodEntry, ParserResults} from "./interfaces";
 
 export class Parser {
+  private data: string;
   private lines: List<string>;
   private desiredPrice: number;
   private foodEntries: Set<FoodEntry>;
 
-  constructor(private data: string) {
-    this.lines = this.getLines();
-    this.desiredPrice = this.getDesiredPrice();
-    this.foodEntries = this.getFoodEntries();
+  constructor(data: string) {
+    this.data = data.trim();
+    let errorString = "Invalid Data";
+    if (!Parser.validateData(data)) throw errorString;
+    try { // Defend against validateData function missing something.
+      this.lines = this.getLines();
+      this.desiredPrice = this.getDesiredPrice();
+      this.foodEntries = this.getFoodEntries();
+    } catch (err) {
+      throw `${errorString}. ${err}`;
+    }
   }
 
   getParserResults() {
@@ -17,7 +25,11 @@ export class Parser {
   }
 
   static validateData(data) {
-    return /\$(\d+)?\.\d{2}(\n((\w| )+),\$(\d+)?\.\d{2})+/.test(data);
+    try {
+      return / *\$(\d+)?\.\d{2} *(( *\n)*(\w| )+, *\$(\d+)?\.\d+ *)+/.test(data);
+    } catch (_) { // Data is definitely bad if validator doesn't run
+      return false;
+    }
   }
 
   private getLines(): List<string> {

@@ -32,3 +32,5 @@ export class App {
     return this.desiredPrice;
   }
 }
+
+// let app = new App(require("fs").readFileSync("/home/ethan/Desktop/tablexi/spec/helpers/valid2.txt", "utf-8"));
