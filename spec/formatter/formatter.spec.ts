@@ -17,6 +17,7 @@ describe("formatter", () => {
     List([215, 215, 215, 215, 215, 215, 215]),
     List([215, 355, 355, 580])
   ]);
+
   let expectedResult = Set([
     Set(["7 orders of mixed fruit or bubble yum (at $2.15 each)."]),
     Set([

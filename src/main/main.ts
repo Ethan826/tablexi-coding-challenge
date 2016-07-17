@@ -2,6 +2,8 @@
 
 import * as electron from "electron";
 
+/* Most code from electrong boilerplate, converted to TypeScript */
+
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.

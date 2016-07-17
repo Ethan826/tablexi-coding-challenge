@@ -8,7 +8,7 @@ var App = (function () {
         var parserResults = (new parser_1.Parser(data)).getParserResults();
         this.desiredPrice = parserResults.desiredPrice;
         this.priceMap = mapMaker_1.MapMaker.makeMap(parserResults.foodEntries);
-        this.priceCombinations = knapsack_1.Knapsack.compute(this.priceMap.keySeq().toSet().toList(), this.desiredPrice).toSet();
+        this.priceCombinations = knapsack_1.Knapsack.compute(this.priceMap.keySeq().toSet(), this.desiredPrice).toSet();
         var formatter = new formatter_1.Formatter(this.priceMap, this.priceCombinations);
         this.results = formatter.makeSentences();
     }

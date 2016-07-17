@@ -12,8 +12,10 @@ const Rx = require("rx-lite");
 import * as $ from "jquery";
 
 export class Browser {
+  // Page templates
   private initialPage: string;
   private resultsPage: string;
+
   private clickListenerObserver: Rx.Observable<any>;
   private fileSelectionObserver: Rx.Observable<Array<string>>;
   private fileDataObserver: Rx.Observable<string>;
@@ -23,6 +25,9 @@ export class Browser {
     this.initialPage = initialPage;
     this.resultsPage = resultsPage;
     this.setPage(initialPage);
+
+    // Returns an observable that will emit the file contents the user selects
+    // iff the data is valid
     this.getDataObservable().subscribe(
       (data) => {
         let app = new App(data);
@@ -35,19 +40,27 @@ export class Browser {
 
   private getDataObservable() {
     let button = document.getElementById("openFile");
+
     let click = Rx.Observable.fromEvent(button, "click");
     let opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
     let reader = Rx.Observable.fromCallback(fs.readFile);
 
+    // Pipeline of observables to convert a stream of clicks into a stream of
+    // file data
     return click
-      .flatMap(() => {
-        return opener({ properties: ["openFile"] });
+      .flatMap(() => { // stream of clicks
+        return opener({ properties: ["openFile"] }); // returns the selected filename (as one-item array)
       })
-      .filter(f => f) // Don't emit event if user doesn't select a file
-      .flatMap(f => reader(f[0], "utf-8"))
-      .map(d => d[1])
-      .do(d => { if (!Parser.validateData(d)) alert("Invalid data."); })
-      .filter(d => Parser.validateData(d));
+      .filter(f => f) // Don't emit event if user didn't select a file
+      .flatMap(f => reader(f[0], "utf-8")) // map filename stream to file data stream
+      .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData]
+      .flatMap((d) => {
+        if (Parser.validateData(d)) { // validate data
+          return Rx.Observable.just(d); // if it's valid, emit it
+        } else {
+          alert("Invalid data."); // if it's invalid, filter it out and alert
+        }
+      });
   }
 
   private setPage(page: string) {
@@ -56,16 +69,24 @@ export class Browser {
   }
 
   private populateResultsPage(desiredPrice: number, results: Set<Set<string>>) {
+    // Put the extracted budget on the page
     $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
+
+    // Empty results
     if (results.isEmpty()) {
       $("#preamble").append(`
         <div class="alert alert-danger" id="noresults">
           There is no combination of foods that satisfy your budget.
         </div>
       `);
+    // Else loop over results to populate list
     } else {
+
+      // Each combo of results
       results.forEach((combo) => {
         $("#results").append(`<li class="list-group-item"><ul class="entry"></ul></li>`);
+
+        // Each food item within combo of results
         combo.forEach((sentence) => {
           $(".entry").last().append(`<li class="list-unstyled food">${sentence}</li>`);
         });

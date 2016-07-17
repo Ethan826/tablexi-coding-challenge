@@ -43,15 +43,27 @@ export class Knapsack {
        */
     } else {
       return prices.flatMap((price: number) => {
-        let newBudget = budget - price;
+        let newBudget = budget - price; // If we buy this item, what is our new budget?
+
+        // Remove items that are more than our budget and more than the item
+        // under consideration.
         let newMenuItems = prices.filter(c => {
           let priceCeiling = Math.min(newBudget, price);
           return c <= priceCeiling;
-        }); // help the type checker
+        });
+
+        // No recursion if the item under consideration exactly zeroes our budget.
         if (newBudget === 0) return List([List([price])]);
+
+        // Recursive call
         let results = this.computeHelper(newMenuItems as any, newBudget);
-        return results
+
+        return results // Test if recursion returned a value or null
+
+          // If recursion returned a value, concat the item under consideration and return
           ? results.map((e: List<number>) => e.concat(price)).toList()
+
+          // Otherwise, no results are with this item, so return null
           : null;
       });
     }

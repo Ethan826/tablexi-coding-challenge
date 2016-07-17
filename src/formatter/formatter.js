@@ -10,12 +10,11 @@ var Formatter = (function () {
         this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
     }
     Formatter.prototype.combineSamePricedFoods = function () {
-        var alternatives = this.priceMap
+        return this.priceMap
             .entrySeq()
             .reduce(function (accum, tuple) {
             return accum.set(tuple[0], tuple[1].join(" or "));
         }, immutable_1.Map());
-        return alternatives;
     };
     Formatter.prototype.makeSentences = function () {
         var _this = this;
@@ -23,8 +22,11 @@ var Formatter = (function () {
             .reduce(function (accum, el) {
             var prices = el.keySeq();
             var freqs = el.valueSeq();
-            var foods = prices.map(function (price) { return _this.priceMapWithCombinedFoods.get(price); });
-            var partialSentence = freqs.zipWith(function (freq, food) { return freq + " order" + (freq > 1 ? "s" : "") + " of " + food; }, foods);
+            var foods = prices
+                .map(function (price) { return _this.priceMapWithCombinedFoods.get(price); });
+            var partialSentence = freqs.zipWith(function (freq, food) {
+                return freq + " order" + (freq > 1 ? "s" : "") + " of " + food;
+            }, foods);
             var fullSentence = partialSentence.zipWith(function (partial, price) {
                 return partial + " (at $" + Formatter.formatCurrency(price) + " each).";
             }, prices).toSet();

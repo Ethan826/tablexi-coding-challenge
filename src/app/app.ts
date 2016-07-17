@@ -12,12 +12,13 @@ export class App {
   private priceCombinations: Set<List<number>>;
   private results: Set<Set<string>>;
 
+  // The data argument is the contents of the file.
   constructor(data: string) {
     let parserResults = (new Parser(data)).getParserResults();
     this.desiredPrice = parserResults.desiredPrice;
     this.priceMap = MapMaker.makeMap(parserResults.foodEntries);
     this.priceCombinations = Knapsack.compute(
-      this.priceMap.keySeq().toSet().toList(),
+      this.priceMap.keySeq().toSet(), // Set of unique prices
       this.desiredPrice
     ).toSet() as any;
     let formatter = new Formatter(this.priceMap, this.priceCombinations);
@@ -32,5 +33,3 @@ export class App {
     return this.desiredPrice;
   }
 }
-
-// let app = new App(require("fs").readFileSync("/home/ethan/Desktop/tablexi/spec/helpers/valid2.txt", "utf-8"));
