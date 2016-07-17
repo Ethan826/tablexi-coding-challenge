@@ -1,9 +1,9 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
-import {App} from "./app";
-import {Parser} from "./parser";
-import {Formatter} from "./formatter";
-import {initialPage, resultsPage} from "./templates";
+import {App} from "../app/app";
+import {Parser} from "../parser/parser";
+import {Formatter} from "../formatter/formatter";
+import {initialPage, resultsPage} from "../templates/templates";
 
 import {Set} from "immutable";
 import fs = require("fs");

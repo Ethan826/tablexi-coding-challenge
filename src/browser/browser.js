@@ -1,8 +1,8 @@
 "use strict";
-var app_1 = require("./app");
-var parser_1 = require("./parser");
-var formatter_1 = require("./formatter");
-var templates_1 = require("./templates");
+var app_1 = require("../app/app");
+var parser_1 = require("../parser/parser");
+var formatter_1 = require("../formatter/formatter");
+var templates_1 = require("../templates/templates");
 var fs = require("fs");
 var dialog = require("electron").remote.dialog;
 var Rx = require("rx-lite");

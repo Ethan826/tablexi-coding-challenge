@@ -1,5 +1,5 @@
 import {List, Set, Map} from "immutable";
-import {FoodEntry, ParserResults} from "./interfaces";
+import {FoodEntry, ParserResults} from "../interfaces/interfaces";
 
 export class Parser {
   private data: string;

@@ -1,10 +1,10 @@
 import {List, Map, Set} from "immutable";
-import {Parser} from "./parser";
-import {ParserResults, FoodEntry} from "./interfaces";
-import {MapMaker} from "./mapMaker";
-import {Knapsack} from "./knapsack";
-import {Browser} from "./browser";
-import {Formatter} from "./formatter";
+import {Parser} from "../parser/parser";
+import {ParserResults, FoodEntry} from "../interfaces/interfaces";
+import {MapMaker} from "../mapMaker/mapMaker";
+import {Knapsack} from "../knapsack/knapsack";
+import {Browser} from "../browser/browser";
+import {Formatter} from "../formatter/formatter";
 
 export class App {
   private desiredPrice: number;

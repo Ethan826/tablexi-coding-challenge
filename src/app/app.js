@@ -1,8 +1,8 @@
 "use strict";
-var parser_1 = require("./parser");
-var mapMaker_1 = require("./mapMaker");
-var knapsack_1 = require("./knapsack");
-var formatter_1 = require("./formatter");
+var parser_1 = require("../parser/parser");
+var mapMaker_1 = require("../mapMaker/mapMaker");
+var knapsack_1 = require("../knapsack/knapsack");
+var formatter_1 = require("../formatter/formatter");
 var App = (function () {
     function App(data) {
         var parserResults = (new parser_1.Parser(data)).getParserResults();

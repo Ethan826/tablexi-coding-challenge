@@ -1,5 +1,5 @@
 import {List, Map, Set} from "immutable";
-import {ParserResults, FoodEntry} from "./interfaces";
+import {ParserResults, FoodEntry} from "../interfaces/interfaces";
 
 export class MapMaker {
   static makeMap(foodEntries: Set<FoodEntry>): Map<number, Set<string>> {

@@ -2,7 +2,7 @@
   "name": "tablexi-coding-challenge",
   "version": "1.0.0",
   "description": "Ethan Kent's submission for the Table XI coding challenge",
-  "main": "./src/main.js",
+  "main": "./src/main/main.js",
   "license": "MIT",
   "scripts": {
     "start": "electron ."
