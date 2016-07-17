@@ -1,20 +1,38 @@
-### Recursive algorithm
+Usage
+=====
+
+Clone the repository to your machine. Install the dependencies with
+`npm install` (and `typings install` if you intend to recompile or edit
+the TypeScript files). Run the app with `npm start` You can package the
+app with
+[electron-packager](https://github.com/electron-userland/electron-packager).
+
+Description
+===========
+
+Recursive algorithm
+-------------------
+
+The core of the application is the function `Knapsack.compute`. The
+function takes two arguments: an Immutable.Set of numbers corresponding
+to menu prices and a number corresponding to the budget / target price.
 
 This could be refactored less cleanly to use ES6 tail call optimization,
 but (1) TCO is not implemented in any of the polyfills or transpilers,
 see <https://goo.gl/XlWN3G>, and (2) we run into runtime issues before
 any stack overflows.
 
-The arguments to the `compute` function are a list of candidate menu
-items and a target (the final price we’re shooting for).
+### Conceptual explanation
 
-#### Conceptual explanation
+The algorithm employs the divide-and-conquer strategy. I used
+[this](http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/DynProg/knapsack2.html)
+description as my jumping-off point.
 
-The algorithm employs the divide-and-conquer strategy. In concept, the
-algorithm looks at the menu items one at a time. It says, “let’s assume
-I buy this item. Now what kind of budget do I have left and what can I
-buy with that?” This is the same kind of question posed by the original
-problem: what menu items will fill out what remains of our budget?
+In concept, the algorithm looks at the menu items one at a time. It
+says, “let’s assume I buy this item. Now what kind of budget do I have
+left and what can I buy with that?” Notice that this is the same kind of
+question posed by the original problem: what menu items will fill out
+what remains of our budget?
 
 We keep recursively solving that problem until we have only one or zero
 items left that we can afford. If there is only one item left, we see if
@@ -45,7 +63,7 @@ we short circuit the recursive call and return that menu item. That is
 necessary because the recursive call would have a budget of zero and so
 would fail to return any result.
 
-#### Example
+### Example
 
 Note that these examples are simplified by eliding the facts that we use
 `Immutable.List`, that the menu items are actually objects that also
@@ -78,3 +96,65 @@ and filters the menu items to `[2]`. This is another base case (a
 one-item list). The base case tests whether `4 % 2 === 0`. It does, so
 it returns `Array(budget / onlyItem).fill(onlyItem)` where
 `onlyItem = menuItems[0]`.
+
+Electron app
+------------
+
+Part of the assignment was this:
+
+> We encourage you to think of this in a real world context, meaning
+> that a client really wants to place this kind of order at a
+> restaurant, (you can assume the client has a laptop with them at the
+> restaurant and can run arbitrary command-line or web programs). In
+> other words, we want you to solve the problem, not just the algorithm.
+> How will the client run the program? How will the output be presented?
+
+I decided to use Electron because it can be packaged into a
+cross-platform executable with no requirement to spin up a server,
+install a runtime environment, or use the command line. The tradeoff is
+that the packaged app is absurdly large.
+
+Functional programming techniques
+---------------------------------
+
+My most comfortable language is Clojure and lately I have been trying to
+learn Scala. As a result, I have used a lot of functional programming
+concepts alongside the built-in object-oriented approach baked into
+TypeScript / JavaScript. In fact, the code probably resembles idiomatic
+Scala more than it does idiomatic TypeScript / JavaScript.
+
+I have used the Immutable.js library, which provides persistent
+immutable data structures. I chose to do so both because the languages I
+have been working with encourage their users to avoid mutation (and the
+bugs it can introduce), and also because using the `reduce` function
+with a mutable collection requires a lot of copying to avoid mutating
+the accumulator while manipulating it.
+
+I chose to represent the data with Immutable.js primitives rather than
+as an object. I did so because that simplifies using the many methods
+Immutable.js exposes (in keeping with Perlis’s advice that “[i]t is
+better to have 100 functions operate on one data structure than 10
+functions on 10 data structures”).
+
+Reactive programming
+--------------------
+
+I made use of RxJS because I was trying to avoid callback hell (and also
+because I think it’s cool). The key event is waiting for the user to
+click on the `Select File` button. That event listener triggers
+launching the file open dialog window, which delivers the filename to a
+callback. It is then necessary to validate the data in the file before
+instantiating the `App` class with the data. If the data is invalid, it
+is necessary to react to another click and launch another dialog window. Thus, we are already in this situation:
+
+    $("#openFile").click(() => {
+      dialog.showOpenDialog( { properties: ["openFile"] }, (filename) => {
+        fs.readFile(filename[0], "utf-8", (data) => {
+          if (Parser.validateData(data)) {
+            // Do something
+          } else {
+            // Somehow go back to the beginning gracefully
+          }
+        });
+      });
+    });
