@@ -116,9 +116,12 @@ method from `Parser`). `Parser`’s constructor manipulates the data and
 stores it in a `desiredPrice` (a `number`) and `priceMap`, an
 `Immutable.Map` with prices as keys and an `Immutable.Set` of strings as
 values, with each string containing the name of one food whose price
-equals the key. For example, `{215: ["pigeon remoulade", "mixed fruit"]}`.
-(Note that numbers are stored internally as an integer representing pennies
-to avoid problems with floats. I saw a [video](http://www.tablexi.com/developers/money-in-ruby/) about this somewhere.)
+equals the key. For example,
+`{215: ["pigeon remoulade", "mixed fruit"]}`. (Note that numbers are
+stored internally as an integer representing pennies to avoid problems
+with floats. I saw a
+[video](http://www.tablexi.com/developers/money-in-ruby/) about this
+somewhere.)
 
 Now, `App` requests `desiredPrice` and `priceMap` from `Parser`. `App`
 then calls the static method `Backpack.compute`, passing in an
@@ -161,9 +164,9 @@ Functional programming techniques
 
 My most comfortable language is Clojure and lately I have been trying to
 learn Scala. As a result, I have used a lot of functional programming
-concepts alongside the built-in object-oriented approach baked into
-TypeScript / JavaScript. In fact, the code probably resembles idiomatic
-Scala more than it does idiomatic TypeScript / JavaScript.
+concepts alongside the object-oriented approach baked into TypeScript /
+JavaScript. In fact, the code probably resembles idiomatic Scala more
+than it does idiomatic TypeScript / JavaScript.
 
 I have used the Immutable.js library, which provides persistent
 immutable data structures. I chose to do so both because the languages I
@@ -211,6 +214,15 @@ file data. By subscribing to that stream, we can do this:
     );
 
 and deal with getting the dataObservable set up elsewhere.
+
+I considered using Promises, but the app must be capable of listening
+for a new click on the `Open File` button if the user closes the dialog
+window or selects a file with invalid data. (That’s the same problem
+posed by data validation happening within the click listener’s
+callback.) It would also have been possible to have the button call a
+function every time it is pushed, but I consider that to be less clean
+from a separation-of-concerns perspective (because the html would know
+about the file-opening and -validation logic).
 
 Data format and validation
 --------------------------
