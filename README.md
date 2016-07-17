@@ -36,14 +36,14 @@ question posed by the original problem: what menu items will fill out
 what remains of our budget?
 
 We keep recursively solving that problem until we have only one or zero
-items left that we can afford. If there is only one item left, we see if
-we can buy one or more of that item and exactly use up what remains of
-our budget. If we cannot use up all our money by buying some integer
-multiple of the only item left, or if there are no items left that we
-can afford, we realize that we cannot buy the item that made the
-recursive call. If we can buy some item that exactly exhausts our
-budget, we pass that information back to our recursive caller, which
-concatenates itself to the results and returns.
+items left that we can afford (and by *item*, I really mean *price*). If
+there is only one item left, we see if we can buy one or more of that
+item and exactly use up what remains of our budget. If we cannot use up
+all our money by buying some integer multiple of the only item left, or
+if there are no items left that we can afford, we realize that we cannot
+buy the item that made the recursive call. If we can buy some item that
+exactly exhausts our budget, we pass that information back to our
+recursive caller, which concatenates itself to the results and returns.
 
 In preparing for the recursive call, we know that we cannot consider any
 menu items that are *larger* than our current budget, so we can
@@ -67,8 +67,7 @@ would fail to return any result.
 ### Example
 
 Note that these examples are simplified by eliding the facts that we use
-`Immutable.List`, that the menu items are actually objects that also
-contain the food name, and that there are some quirks with nesting and
+`Immutable.List` and that there are some quirks with nesting and
 flattening lists of lists.
 
 Consider the following example: the menu items are `[2, 3, 4]`, and the
@@ -113,7 +112,7 @@ handles UI. Once `Browser` has valid data, it instantiates `App`. `App`
 instantiates `Parser`, passing in the data `Browser` handed off
 (`Browser` validated the data by calling the static `validateData`
 method from `Parser`). `Parser`’s constructor manipulates the data and
-stores it in a `desiredPrice` (a `number`) and `priceMap`, an
+stores it in `desiredPrice` (a `number`) and `priceMap`, an
 `Immutable.Map` with prices as keys and an `Immutable.Set` of strings as
 values, with each string containing the name of one food whose price
 equals the key. For example,
@@ -141,6 +140,26 @@ methods and uses that data to populate the results page.
 This design would permit a new UI provider to be subbed in, a different
 algorithm to calculate the prices, and a different formatter to create
 the output text.
+
+Tests
+-----
+
+One area I’m still learning about is how to balance between testing and
+preferring private data and methods. Here I have set most of the
+implementation as private, and so my tests focus mostly on the class’s
+APIs rather than implementation details. As a result, I was not positive
+how to test-drive somewhat complicated internal details that I was
+figuring out as I implemented them (although I got some relief from an
+[article](https://medium.com/table-xi/development-driven-testing-673d3959dac2#.7xxo4lq6b)
+I came across).
+
+The tests of `App` are closer to functional tests because they involve
+several classes working together.
+
+One possible TODO is to use
+[Spectron](https://github.com/electron/spectron) or something similar to
+test the UI. I have manipulated the UI myself to test for bugs, but
+automatic and regression testing could add some comfort.
 
 Electron app
 ------------
