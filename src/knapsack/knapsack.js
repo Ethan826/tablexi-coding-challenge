@@ -32,7 +32,7 @@ var Knapsack = (function () {
                     return immutable_1.List([immutable_1.List([price])]);
                 var results = _this.computeHelper(newMenuItems, newBudget);
                 return results
-                    ? results.map(function (e) { return e.concat(price); }).toList()
+                    ? results.map(function (e) { return e.concat(price); }).toSet()
                     : null;
             });
         }

@@ -1,6 +1,5 @@
 import {List, Map, Set} from "immutable";
-import {Parser} from "../parser/parser";
-import {MapMaker} from "../mapMaker/mapMaker";
+import {Parser, ParserResults} from "../parser/parser";
 import {Knapsack} from "../knapsack/knapsack";
 import {Browser} from "../browser/browser";
 import {Formatter} from "../formatter/formatter";
@@ -13,15 +12,15 @@ export class App {
 
   // The data argument is the contents of the file.
   constructor(data: string) {
-    let parserResults = (new Parser(data)).getParserResults();
+    let parserResults: ParserResults = (new Parser(data)).getParserResults();
     this.desiredPrice = parserResults.desiredPrice;
     this.priceMap = parserResults.foodEntries;
     this.priceCombinations = Knapsack.compute(
-      this.priceMap.keySeq().toSet(), // Set of unique prices
+      this.priceMap.keySeq().toSet(), // Seq of unique prices
       this.desiredPrice
     ).toSet() as any;
     let formatter = new Formatter(this.priceMap, this.priceCombinations);
-    this.results = formatter.makeSentences();
+    this.results = formatter.getSentences();
   }
 
   getResults(): Set<Set<string>> {

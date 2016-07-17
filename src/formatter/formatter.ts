@@ -6,8 +6,9 @@ import {Map, Set, List, Seq} from "immutable";
  */
 
 export class Formatter {
-  private priceCombinationsWithFreqs: any;
-  private priceMapWithCombinedFoods: any;
+  private priceCombinationsWithFreqs;
+  private priceMapWithCombinedFoods;
+  private sentences: Set<Set<string>>;
 
   constructor(
     private priceMap: any,
@@ -21,6 +22,11 @@ export class Formatter {
     // Map of prices as keys and a list of all food items at that price
     // joined by the word " or " e.g. { 200: "pickles or haggis gum" }
     this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
+    this.sentences = this.makeSentences();
+  }
+
+  getSentences() {
+    return this.sentences;
   }
 
   private combineSamePricedFoods() {
@@ -36,7 +42,7 @@ export class Formatter {
       Map()); // Initialize accumulator as empty Map
   }
 
-  makeSentences(): Set<Set<string>> {
+  private makeSentences(): Set<Set<string>> {
     // Return sets of sets of sentences of the form "1 order of newt tripe (at
     // $3.25 each)." Each outer set is one combination of orders.
 

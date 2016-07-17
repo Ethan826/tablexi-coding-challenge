@@ -12,7 +12,7 @@ Description
 ===========
 
 Knapsack algorithm
--------------------
+------------------
 
 The core of the application is the function `Knapsack.compute`. The
 function takes two arguments: an Immutable.Set of numbers corresponding
@@ -20,8 +20,8 @@ to menu prices and a number corresponding to the budget / target price.
 
 This could be refactored less cleanly to use ES6 tail call optimization,
 but (1) TCO is not implemented in any of the polyfills or transpilers,
-see <https://goo.gl/XlWN3G>, and (2) we run into runtime issues before
-any stack overflows.
+see <https://goo.gl/XlWN3G>, and (2) we run into time issues before any
+stack overflows.
 
 ### Conceptual explanation
 
@@ -98,6 +98,45 @@ one-item list). The base case tests whether `4 % 2 === 0`. It does, so
 it returns `Array(budget / onlyItem).fill(onlyItem)` where
 `onlyItem = menuItems[0]`.
 
+Design
+------
+
+I have tried to separate concerns in designing the app, but I have not
+defined interfaces and abstract classes to formalize the abstractions.
+That would be my first step if we wanted to incorporate additional
+sources of UI, for example. See my project
+[here](https://github.com/Ethan826/tic-tac-toe_coding_challenge) for how
+I would approach that kind of implementation.
+
+Once Electron cranks up, it calls `Browser`, controls the view and
+handles UI. Once `Browser` has valid data, it instantiates `App`. `App`
+instantiates `Parser`, passing in the data `Browser` handed off
+(`Browser` validated the data by calling the static `validateData`
+method from `Parser`). `Parser`’s constructor manipulates the data and
+stores it in a `desiredPrice` (a `number`) and `priceMap`, an
+`Immutable.Map` with prices as keys and an `Immutable.Set` of strings as
+values, with each string containing the name of one food whose price
+equals the key.
+
+Now, `App` requests `desiredPrice` and `priceMap` from `Parser`. `App`
+then calls the static method `Backpack.compute`, passing in an
+`Immutable.Set` of prices and a `desiredPrice`. `compute` returns an
+`Immutable.Set<Immutable.List<number>>`. The inner collections each
+contain one combination of prices that add up to the `desiredPrice`.
+
+`App` next instantiates `Formatter`, passing in `priceMap` and the
+results from `Knapsack.compute`. `Formatter`’s constructor creates an
+`Immutable.Set<Immutable.Set<string>>` of sentences in the form “7
+orders of mixed fruit (at \$2.15 each).” `App` then requests that
+result.
+
+Finally, `Browser` calls `App`’s `getDesiredPrice` and `getResults`
+methods and uses that data to populate the results page.
+
+This design would permit a new UI provider to be subbed in, a different
+algorithm to calculate the prices, and a different formatter to create
+the output text.
+
 Electron app
 ------------
 
@@ -170,3 +209,11 @@ file data. By subscribing to that stream, we can do this:
     );
 
 and deal with getting the dataObservable set up elsewhere.
+
+Data format and validation
+--------------------------
+
+I handle invalid data and data that yields no results. I also strip
+leading and trailing whitespace and blank lines. An additional TODO
+might be handling more kinds of malformed data—prices without dollar
+signs, punctuation within the food names, etc.

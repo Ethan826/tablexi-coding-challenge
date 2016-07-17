@@ -60,7 +60,7 @@ export class Knapsack {
         return results // Test if recursion returned a value or null
 
           // If recursion returned a value, concat the item under consideration and return
-          ? results.map((e: List<number>) => e.concat(price)).toList()
+          ? results.map((e: List<number>) => e.concat(price)).toSet()
 
           // Otherwise, no results are with this item, so return null
           : null;

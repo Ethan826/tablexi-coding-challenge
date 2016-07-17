@@ -9,7 +9,7 @@ var App = (function () {
         this.priceMap = parserResults.foodEntries;
         this.priceCombinations = knapsack_1.Knapsack.compute(this.priceMap.keySeq().toSet(), this.desiredPrice).toSet();
         var formatter = new formatter_1.Formatter(this.priceMap, this.priceCombinations);
-        this.results = formatter.makeSentences();
+        this.results = formatter.getSentences();
     }
     App.prototype.getResults = function () {
         return this.results;

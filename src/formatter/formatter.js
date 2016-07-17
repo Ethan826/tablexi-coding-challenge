@@ -8,7 +8,11 @@ var Formatter = (function () {
         this.priceCombinationsWithFreqs = this.priceCombinations
             .map(function (c) { return _this.frequencies(c); });
         this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
+        this.sentences = this.makeSentences();
     }
+    Formatter.prototype.getSentences = function () {
+        return this.sentences;
+    };
     Formatter.prototype.combineSamePricedFoods = function () {
         return this.priceMap
             .entrySeq()
