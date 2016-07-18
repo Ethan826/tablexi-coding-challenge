@@ -71,7 +71,7 @@ export class Browser {
     // Put the extracted budget on the page
     $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
 
-    if (results.isEmpty()) {
+    if (results.isEmpty() || results.first().isEmpty()) {
       $("#preamble").append(`
         <div class="alert alert-danger" id="noresults">
           There is no combination of foods that satisfy your budget.
