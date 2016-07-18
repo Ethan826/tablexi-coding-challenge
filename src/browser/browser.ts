@@ -69,7 +69,7 @@ export class Browser {
 
   private populateResultsPage(desiredPrice: number, results: Set<Set<string>>) {
     // Put the extracted budget on the page
-    $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
+    $("#budget").append(Formatter.formatCurrency(desiredPrice));
 
     if (results.isEmpty() || results.first().isEmpty()) {
       $("#preamble").append(`
