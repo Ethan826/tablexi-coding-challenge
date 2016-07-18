@@ -16,9 +16,11 @@ Description
 
 ### Knapsack algorithm
 
-The core of the application is the function `Knapsack.compute`. The
-function takes two arguments: an Immutable.Set of numbers corresponding
-to menu prices and a number corresponding to the budget / target price.
+The core of the application is the function `compute` (and
+`computeHelper`) in the `Knapsack` class. The function takes two
+arguments: an Immutable.Set of numbers corresponding to menu prices and
+a number corresponding to the budget / target price. It returns a
+Immutable.List of Immutable.Sets of combinations that sum to the budget.
 
 This could be refactored less cleanly to use ES6 tail call optimization,
 but (1) TCO is not implemented in any of the polyfills, see
@@ -101,32 +103,35 @@ it returns `Array(budget / onlyItem).fill(onlyItem)` where
 
 ### Memoization
 
-Some of the materials on the knapsack problem discuss memoizing the
-results (or using dynamic programming). I may be misunderstanding what
-I’m reading, but I think that refers to the knapsack problem in which
-there are both weights and values. I have two reasons why I didn’t
-choose to use memoization.
+Even though I take steps before recursion to remove causes of
+duplication, different branches of the recursion can encounter the same
+arguments. I originally tried to use the `memoizee` library, but it
+appears only to memoize final results based on the *initial* call to the
+memoized function. I tested it with a recursive implementation of the
+Fibonacci sequence, and while calling `fib(32)` a second time was much
+faster, calling `fib(33)` before and after calling `fib(32)` did not
+demonstrate a speedup. So `memoizee` did not capture the duplicated
+effort in running `fib()` with a larger argument.
 
-First, I tested the results with and without the `memoizee` library. I
-used data cribbed from
-[here](https://people.sc.fsu.edu/~jburkardt/datasets/subset_sum/subset_sum.html).
-I ran the following code:
+Immutable.Map would work well if it weren’t immutable—but I need to be
+able to mutate the data structure holding the memoized data because it
+has to sit outside the scope of the recursive function (there might be
+some functional programming trick to that but I don’t know it).
 
-    let start = process.hrtime();
-    Knapsack.compute(List([8, 6, 4, 21]), 30);
-    Knapsack.compute(List([23, 31, 29, 44, 53, 38, 63, 85, 89, 82]), 165);
-    Knapsack.compute(Set([518533, 1037066, 2074132, 1648264, 796528, 1593056, 686112, 1372224, 244448, 488896, 977792, 1955584, 1411168, 322336, 644672, 1289344, 78688, 157376, 314752, 629504, 1259008]),  2463098);
-    console.log(process.hrtime(start)[1]);
+So I decided to use the `object-hash` library and roll my own
+memoization. I coerce the `prices` argument to an array and then hash
+that, hash the budget number, then concatenate and hash those strings (I
+could have converted both to strings, concatenated, and the hashed them,
+but I was concerned there might be some detail of converting from a
+JavaScript object to a string that might influence the result of
+hashing.) The hash becomes the key in a JavaScript object called `memo`,
+and the return value becomes the value.
 
-Using memoization, the average of five runs was 651 ms (on my slow
-Fedora machine). Without memoization, the average of five runs was 359
-ms.
-
-Second, because I use an Immutable.Set of weights (that is, a sequence
-with only unique values), and because I filter all values above the
-`desiredPrice` for the recursive caller, no recursive call to the
-`compute` function should have the same arguments. Thus, memoization
-would appear to only add overhead.
+The first step on calling the `computeHelper` function is to check the
+`memo` variable. If that key is `undefined`, this is the first time the
+function has been called with those arguments. Before each of the
+`return` statements, the function first stashes that value in the `memo`
+variable, at the key corresponding to the previously computed hash.
 
 Design
 ------
@@ -154,15 +159,18 @@ problems with floats. I saw a
 somewhere.)
 
 Now, `App` requests `desiredPrice` and `priceMap` from `Parser`. `App`
-then calls the static method `Backpack.compute`, passing in an
-`Immutable.Set` of prices and a `desiredPrice`. `compute` returns an
+then instantiates a `Backpack` passing in an `Immutable.Set` of prices
+and a `desiredPrice`. `Backpack`’s constructor calls `compute` (which
+calls `computeHelper`) calculating results as an
 `Immutable.Set<Immutable.List<number>>`. The inner collections each
 contain one combination of prices that add up to the `desiredPrice`.
+`App` calls `getResults` on its instance of `Backpack` to receive that
+result.
 
 `App` next instantiates `Formatter`, passing in `priceMap` and the
 results from `Knapsack.compute`. `Formatter`’s constructor creates an
 `Immutable.Set<Immutable.Set<string>>` of sentences in the form “7
-orders of mixed fruit (at \$2.15 each).” `App` then requests that
+orders of mixed fruit (at \\\$2.15 each).” `App` then requests that
 result.
 
 Finally, `Browser` calls `App`’s `getDesiredPrice` and `getResults`
@@ -283,7 +291,7 @@ might be handling more kinds of malformed data—prices without dollar
 signs, punctuation within the food names, etc.
 
 `Any` types
----------
+-----------
 
 The TypeScript compiler gets confused by Immutable.js data structures in
 some circumstances—particularly when reducing over a collection. Rather

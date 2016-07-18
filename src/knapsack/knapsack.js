@@ -8,7 +8,7 @@ var Knapsack = (function () {
     }
     Knapsack.prototype.getResults = function () { return this.results; };
     Knapsack.prototype.hashArgs = function (prices, budget) {
-        return hash("" + prices.toJS() + budget);
+        return hash(hash(prices.toJS()) + hash(budget));
     };
     Knapsack.prototype.computeHelper = function (prices, budget) {
         var _this = this;
