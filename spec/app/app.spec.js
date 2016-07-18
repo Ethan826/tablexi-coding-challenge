@@ -16,7 +16,7 @@ describe("app data parsing", function () {
         var prefix = "./spec/helpers/valid";
         [(prefix + "1.txt"), (prefix + "2.txt"), (prefix + "3.txt")].forEach(function (good) {
             var data = fs.readFileSync(good, "utf-8");
-            expect(function () { return new app_1.App(data); }).not.toThrow();
+            new app_1.App(data);
         });
     });
     it("returns an empty Set for no results", function () {
@@ -60,7 +60,6 @@ describe("app data parsing", function () {
         ]);
         var data = fs.readFileSync("./spec/helpers/yesresults.txt", "utf-8");
         var results = (new app_1.App(data)).getResults();
-        console.log(results);
         expect(results.equals(expectedResults)).toBe(true);
     });
 });

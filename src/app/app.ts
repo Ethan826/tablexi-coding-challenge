@@ -18,7 +18,6 @@ export class App {
       this.priceMap.keySeq().toSet(), // Seq of unique prices
       this.desiredPrice
     );
-    console.log(knapsack.getResults());
     this.priceCombinations = knapsack.getResults();
     let formatter = new Formatter(this.priceMap, this.priceCombinations);
     this.results = formatter.getSentences();

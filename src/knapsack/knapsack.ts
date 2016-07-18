@@ -1,24 +1,41 @@
 /// <reference path="../../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
+let hash = require("object-hash");
 
 export class Knapsack {
-  private results;
+  private results: Set<List<number>>;
+  private memo: Object;
 
   constructor(prices: List<number> | Set<number>, budget: number) {
-    this.results = this.computeHelper(prices, budget);
+    this.memo = {};
+    this.results = this.computeHelper(prices, budget) || Set([List([])]);
   }
 
   getResults() { return this.results; }
 
+  private hashArgs(prices, budget) {
+    return hash(`${prices.toJS()}${budget}`);
+  }
+
   private computeHelper(
     prices: List<number> | Set<number>,
     budget: number): any { // actually Set<List<number>>
+    let hashed = this.hashArgs(prices, budget);
+
+    let memoizedResult = this.memo[hashed];
+    if (typeof memoizedResult !== "undefined") {
+      return memoizedResult;
+    }
+
+
     // Base cases
 
     // If there are no prices, there can be no solution. Return null.
     if (prices.size === 0) {
-      return null;
+      let results = null;
+      this.memo[hashed] = results;
+      return results;
 
       // With one price, return null if price is not a factor of budget
       // or return a list of length budget / price filled with price.
@@ -26,9 +43,13 @@ export class Knapsack {
     } else if (prices.size === 1) {
       let onlyElement = prices.toList().get(0);
       if (budget % onlyElement === 0) {
-        return Set([List(Array(budget / onlyElement).fill(onlyElement))]);
+        let results = Set([List(Array(budget / onlyElement).fill(onlyElement))]);
+        this.memo[hashed] = results;
+        return results;
       } else {
-        return null;
+        let results = null;
+        this.memo[hashed] = results;
+        return results;
       }
 
       // Recursive case. Divide-and-conquer algorithm compiles and filters
@@ -49,17 +70,24 @@ export class Knapsack {
 
         // No recursion if the item under consideration exactly zeroes our
         // budget.
-        if (newBudget === 0) return List([List([price])]);
+        if (newBudget === 0) {
+          let results = List([List([price])]);
+          this.memo[hashed] = results;
+          return results;
+        };
 
         // Recursive call
-        let results = this.computeHelper(newMenuItems as any, newBudget);
+        let recursive = this.computeHelper(newMenuItems as any, newBudget);
 
         // If recursion returned results, concat the item under consideration
         // onto each result and return that. If recursion didn't return results
         // return null.
-        return results
-          ? results.map((e: List<number>) => e.concat(price)).toSet()
+        let results = recursive
+          ? recursive.map((e: List<number>) => e.concat(price)).toSet()
           : null;
+
+        this.memo[hashed] = results;
+        return results;
       });
     }
   };

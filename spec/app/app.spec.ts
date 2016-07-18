@@ -20,7 +20,8 @@ describe("app data parsing", () => {
     let prefix = "./spec/helpers/valid";
     [`${prefix}1.txt`, `${prefix}2.txt`, `${prefix}3.txt`].forEach(good => {
       let data = fs.readFileSync(good, "utf-8");
-      expect(() => new App(data)).not.toThrow();
+      new App(data);
+      // expect(() => new App(data)).not.toThrow();
     });
   });
 
@@ -68,7 +69,6 @@ describe("app data parsing", () => {
 
     let data = fs.readFileSync("./spec/helpers/yesresults.txt", "utf-8");
     let results = (new App(data)).getResults();
-    console.log(results);
     expect(results.equals(expectedResults)).toBe(true);
   });
 });

@@ -1,22 +1,38 @@
 "use strict";
 var immutable_1 = require("immutable");
+var hash = require("object-hash");
 var Knapsack = (function () {
     function Knapsack(prices, budget) {
-        this.results = this.computeHelper(prices, budget);
+        this.memo = {};
+        this.results = this.computeHelper(prices, budget) || immutable_1.Set([immutable_1.List([])]);
     }
     Knapsack.prototype.getResults = function () { return this.results; };
+    Knapsack.prototype.hashArgs = function (prices, budget) {
+        return hash("" + prices.toJS() + budget);
+    };
     Knapsack.prototype.computeHelper = function (prices, budget) {
         var _this = this;
+        var hashed = this.hashArgs(prices, budget);
+        var memoizedResult = this.memo[hashed];
+        if (typeof memoizedResult !== "undefined") {
+            return memoizedResult;
+        }
         if (prices.size === 0) {
-            return null;
+            var results = null;
+            this.memo[hashed] = results;
+            return results;
         }
         else if (prices.size === 1) {
             var onlyElement = prices.toList().get(0);
             if (budget % onlyElement === 0) {
-                return immutable_1.Set([immutable_1.List(Array(budget / onlyElement).fill(onlyElement))]);
+                var results = immutable_1.Set([immutable_1.List(Array(budget / onlyElement).fill(onlyElement))]);
+                this.memo[hashed] = results;
+                return results;
             }
             else {
-                return null;
+                var results = null;
+                this.memo[hashed] = results;
+                return results;
             }
         }
         else {
@@ -26,12 +42,18 @@ var Knapsack = (function () {
                     var priceCeiling = Math.min(newBudget, price);
                     return c <= priceCeiling;
                 });
-                if (newBudget === 0)
-                    return immutable_1.List([immutable_1.List([price])]);
-                var results = _this.computeHelper(newMenuItems, newBudget);
-                return results
-                    ? results.map(function (e) { return e.concat(price); }).toSet()
+                if (newBudget === 0) {
+                    var results_1 = immutable_1.List([immutable_1.List([price])]);
+                    _this.memo[hashed] = results_1;
+                    return results_1;
+                }
+                ;
+                var recursive = _this.computeHelper(newMenuItems, newBudget);
+                var results = recursive
+                    ? recursive.map(function (e) { return e.concat(price); }).toSet()
                     : null;
+                _this.memo[hashed] = results;
+                return results;
             });
         }
     };
