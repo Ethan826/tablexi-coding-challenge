@@ -22,3 +22,5 @@ var App = (function () {
     return App;
 }());
 exports.App = App;
+var f = require("fs").readFileSync("/home/ethan/Desktop/tablexi-coding-challenge/spec/helpers/yesresults.txt", "utf-8");
+var a = new App(f);

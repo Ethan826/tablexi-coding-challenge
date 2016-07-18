@@ -68,6 +68,7 @@ describe("app data parsing", () => {
 
     let data = fs.readFileSync("./spec/helpers/yesresults.txt", "utf-8");
     let results = (new App(data)).getResults();
+    console.log(results);
     expect(results.equals(expectedResults)).toBe(true);
   });
 });

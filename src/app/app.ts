@@ -32,3 +32,6 @@ export class App {
     return this.desiredPrice;
   }
 }
+
+let f = require("fs").readFileSync("/home/ethan/Desktop/tablexi-coding-challenge/spec/helpers/yesresults.txt", "utf-8");
+let a = new App(f);
