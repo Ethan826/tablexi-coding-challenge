@@ -16,27 +16,27 @@ describe("knapsack", () => {
 
     let menuItems = Set([215, 275, 335, 355, 420, 580]);
 
-    expect(Knapsack.compute(menuItems, 1505)).toEqual(expectedResultGiven);
+    expect((new Knapsack(menuItems, 1505)).getResults()).toEqual(expectedResultGiven);
   });
 
   it("correctly computes the supplied problem without extraneous numbers", () => {
-    expect(Knapsack.compute(Set([215, 355, 580]), 1505)).toEqual(expectedResultGiven);
+    expect((new Knapsack(Set([215, 355, 580]), 1505)).getResults()).toEqual(expectedResultGiven);
   });
 
   it("finds no results when supplied problem is altered", () => {
-    expect(Knapsack.compute(Set([225, 355, 580]), 1505)).not.toEqual(expectedResultGiven);
+    expect((new Knapsack(Set([225, 355, 580]), 1505)).getResults()).not.toEqual(expectedResultGiven);
   });
 
   it("correctly computes additional data", () => {
     // Wrapping in IIFE for namespacing
     (() => {
       let expectedResult = Set([List([2, 2, 2]), List([3, 3]), List([2, 4])]);
-      expect(Knapsack.compute(Set([2, 3, 4]), 6)).toEqual(expectedResult);
+      expect((new Knapsack(Set([2, 3, 4]), 6)).getResults()).toEqual(expectedResult);
     })();
 
     (() => {
       let expectedResult = Set([List([2, 2, 2]), List([3, 3])]);
-      expect(Knapsack.compute(Set([2, 3, 5]), 6)).toEqual(expectedResult);
+      expect((new Knapsack(Set([2, 3, 5]), 6)).getResults()).toEqual(expectedResult);
     })();
 
     (() => {
@@ -46,7 +46,7 @@ describe("knapsack", () => {
         List([2, 2]),
         List([1, 3])]);
 
-      expect(Knapsack.compute(Set([1, 2, 3]), 4)).toEqual(expectedResult);
+      expect((new Knapsack(Set([1, 2, 3]), 4)).getResults()).toEqual(expectedResult);
     })();
   });
 });

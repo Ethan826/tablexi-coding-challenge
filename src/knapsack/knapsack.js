@@ -1,14 +1,22 @@
 "use strict";
 var immutable_1 = require("immutable");
+var fnv = require("fnv-plus");
 var Knapsack = (function () {
-    function Knapsack() {
+    function Knapsack(prices, budget) {
+        this.memo = {};
+        this.results = this.computeHelper(prices, budget);
     }
-    Knapsack.compute = function (prices, budget) {
-        var results = this.computeHelper(prices, budget);
-        return results ? results : immutable_1.Set();
+    Knapsack.prototype.getResults = function () {
+        return this.results;
     };
-    Knapsack.computeHelper = function (prices, budget) {
+    Knapsack.prototype.computeHelper = function (prices, budget) {
         var _this = this;
+        var hashedArgs = fnv.hash(String(prices) + String(budget)).str();
+        var lookup = this.memo[hashedArgs];
+        if (lookup) {
+            console.log("Memoization!");
+            return lookup;
+        }
         if (prices.size === 0) {
             return null;
         }
@@ -30,14 +38,15 @@ var Knapsack = (function () {
                 });
                 if (newBudget === 0)
                     return immutable_1.List([immutable_1.List([price])]);
-                var results = _this.computeHelper(newMenuItems, newBudget);
-                return results
-                    ? results.map(function (e) { return e.concat(price); }).toSet()
+                var recursion = _this.computeHelper(newMenuItems, newBudget);
+                var results = recursion
+                    ? recursion.map(function (e) { return e.concat(price); }).toSet()
                     : null;
+                _this.memo[hashedArgs] = results;
+                return results;
             });
         }
     };
-    ;
     return Knapsack;
 }());
 exports.Knapsack = Knapsack;

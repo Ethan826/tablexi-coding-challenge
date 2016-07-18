@@ -12,22 +12,22 @@ describe("knapsack", function () {
             immutable_1.List([215, 355, 355, 580])
         ]);
         var menuItems = immutable_1.Set([215, 275, 335, 355, 420, 580]);
-        expect(knapsack_1.Knapsack.compute(menuItems, 1505)).toEqual(expectedResultGiven);
+        expect((new knapsack_1.Knapsack(menuItems, 1505)).getResults()).toEqual(expectedResultGiven);
     });
     it("correctly computes the supplied problem without extraneous numbers", function () {
-        expect(knapsack_1.Knapsack.compute(immutable_1.Set([215, 355, 580]), 1505)).toEqual(expectedResultGiven);
+        expect((new knapsack_1.Knapsack(immutable_1.Set([215, 355, 580]), 1505)).getResults()).toEqual(expectedResultGiven);
     });
     it("finds no results when supplied problem is altered", function () {
-        expect(knapsack_1.Knapsack.compute(immutable_1.Set([225, 355, 580]), 1505)).not.toEqual(expectedResultGiven);
+        expect((new knapsack_1.Knapsack(immutable_1.Set([225, 355, 580]), 1505)).getResults()).not.toEqual(expectedResultGiven);
     });
     it("correctly computes additional data", function () {
         (function () {
             var expectedResult = immutable_1.Set([immutable_1.List([2, 2, 2]), immutable_1.List([3, 3]), immutable_1.List([2, 4])]);
-            expect(knapsack_1.Knapsack.compute(immutable_1.Set([2, 3, 4]), 6)).toEqual(expectedResult);
+            expect((new knapsack_1.Knapsack(immutable_1.Set([2, 3, 4]), 6)).getResults()).toEqual(expectedResult);
         })();
         (function () {
             var expectedResult = immutable_1.Set([immutable_1.List([2, 2, 2]), immutable_1.List([3, 3])]);
-            expect(knapsack_1.Knapsack.compute(immutable_1.Set([2, 3, 5]), 6)).toEqual(expectedResult);
+            expect((new knapsack_1.Knapsack(immutable_1.Set([2, 3, 5]), 6)).getResults()).toEqual(expectedResult);
         })();
         (function () {
             var expectedResult = immutable_1.Set([
@@ -35,7 +35,7 @@ describe("knapsack", function () {
                 immutable_1.List([1, 1, 2]),
                 immutable_1.List([2, 2]),
                 immutable_1.List([1, 3])]);
-            expect(knapsack_1.Knapsack.compute(immutable_1.Set([1, 2, 3]), 4)).toEqual(expectedResult);
+            expect((new knapsack_1.Knapsack(immutable_1.Set([1, 2, 3]), 4)).getResults()).toEqual(expectedResult);
         })();
     });
 });

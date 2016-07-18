@@ -1,18 +1,26 @@
 /// <reference path="../../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
+let fnv = require("fnv-plus");
 
 export class Knapsack {
-  static compute(
-    prices: List<number> | Set<number>,
-    budget: number): any {
-    let results = this.computeHelper(prices, budget);
-    return results ? results : Set();
+  private memo;
+  private results;
+
+  constructor(prices: List<number> | Set<number>, budget: number) {
+    this.memo = {};
+    this.results = this.computeHelper(prices, budget);
   }
 
-  static computeHelper(
-    prices: List<number> | Set<number>,
-    budget: number): any { // actually Set<List<number>>
+  getResults() {
+    return this.results;
+  }
+
+  private computeHelper(prices, budget) {
+    let hashedArgs = fnv.hash(String(prices) + String(budget)).str();
+    let lookup = this.memo[hashedArgs];
+    if (lookup) { console.log("Memoization!"); return lookup; }
+
     // Base cases
 
     // If there are no prices, there can be no solution. Return null.
@@ -51,15 +59,18 @@ export class Knapsack {
         if (newBudget === 0) return List([List([price])]);
 
         // Recursive call
-        let results = this.computeHelper(newMenuItems as any, newBudget);
+        let recursion = this.computeHelper(newMenuItems as any, newBudget);
 
         // If recursion returned results, concat the item under consideration
         // onto each result and return that. If recursion didn't return results
         // return null.
-        return results
-          ? results.map((e: List<number>) => e.concat(price)).toSet()
+        let results = recursion
+          ? recursion.map((e: List<number>) => e.concat(price)).toSet()
           : null;
+
+        this.memo[hashedArgs] = results;
+        return results;
       });
     }
-  };
+  }
 }

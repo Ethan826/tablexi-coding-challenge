@@ -7,7 +7,9 @@ var App = (function () {
         var parserResults = (new parser_1.Parser(data)).getParserResults();
         this.desiredPrice = parserResults.desiredPrice;
         this.priceMap = parserResults.foodEntries;
-        this.priceCombinations = knapsack_1.Knapsack.compute(this.priceMap.keySeq().toSet(), this.desiredPrice).toSet();
+        var knapsack = new knapsack_1.Knapsack(this.priceMap.keySeq().toSet(), this.desiredPrice);
+        console.log(knapsack.getResults());
+        this.priceCombinations = knapsack.getResults();
         var formatter = new formatter_1.Formatter(this.priceMap, this.priceCombinations);
         this.results = formatter.getSentences();
     }
