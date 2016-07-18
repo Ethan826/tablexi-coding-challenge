@@ -1,5 +1,8 @@
+Table XI Coding Challenge
+=========================
+
 Usage
-=====
+-----
 
 Clone the repository to your machine. Install the dependencies with
 `npm install` (and `typings install` if you intend to recompile or edit
@@ -9,10 +12,9 @@ app with
 To run the tests, run `jasmine`.
 
 Description
-===========
+-----------
 
-Knapsack algorithm
-------------------
+### Knapsack algorithm
 
 The core of the application is the function `Knapsack.compute`. The
 function takes two arguments: an Immutable.Set of numbers corresponding
@@ -78,8 +80,8 @@ For the 4 element, the recursive call sets the new budget to 6 - 4 = 2.
 It then filters the menu items to remove any item more than the new
 budget (2) and any item more than the item currently under consideration
 (4). So the new list of menu items for the recursive call is `[2]`. That
-is one of the recursive base cases. The result of that recursion is
-`[[2]]`. On receiving the result, the algorithm concatenates the 4 to
+is one of the recursive base cases. The result of that recursion
+is`[[2]]`. On receiving the result, the algorithm concatenates the 4 to
 reach one final solution of `[[2, 4]]`.
 
 For the 3 element, the recursive call sets the new budget to 6 - 3 = 3
@@ -96,6 +98,35 @@ and filters the menu items to `[2]`. This is another base case (a
 one-item list). The base case tests whether `4 % 2 === 0`. It does, so
 it returns `Array(budget / onlyItem).fill(onlyItem)` where
 `onlyItem = menuItems[0]`.
+
+### Memoization
+
+Some of the materials on the knapsack problem discuss memoizing the
+results (or using dynamic programming). I may be misunderstanding what
+I’m reading, but I think that refers to the knapsack problem in which
+there are both weights and values. I have two reasons why I didn’t
+choose to use memoization.
+
+First, I tested the results with and without the `memoizee` library. I
+used data cribbed from
+[here](https://people.sc.fsu.edu/~jburkardt/datasets/subset_sum/subset_sum.html).
+I ran the following code:
+
+    let start = process.hrtime();
+    Knapsack.compute(List([8, 6, 4, 21]), 30);
+    Knapsack.compute(List([23, 31, 29, 44, 53, 38, 63, 85, 89, 82]), 165);
+    Knapsack.compute(Set([518533, 1037066, 2074132, 1648264, 796528, 1593056, 686112, 1372224, 244448, 488896, 977792, 1955584, 1411168, 322336, 644672, 1289344, 78688, 157376, 314752, 629504, 1259008]),  2463098);
+    console.log(process.hrtime(start)[1]);
+
+Using memoization, the average of five runs was 651 ms (on my slow
+Fedora machine). Without memoization, the average of five runs was 359
+ms.
+
+Second, because I use an Immutable.Set of weights (that is, a sequence
+with only unique values), and because I filter all values above the
+`desiredPrice` for the recursive caller, no recursive call to the
+`compute` function should have the same arguments. Thus, memoization
+would appear to only add overhead.
 
 Design
 ------
@@ -115,10 +146,10 @@ method from `Parser`). `Parser`’s constructor manipulates the data and
 stores it in `desiredPrice` (a `number`) and `priceMap`, an
 `Immutable.Map` with prices as keys and an `Immutable.Set` of strings as
 values, with each string containing the name of one food whose price
-equals the key. For example,
-`{215: ["pigeon remoulade", "mixed fruit"]}`. (Note that numbers are
-stored internally as an integer representing pennies to avoid problems
-with floats. I saw a
+equals the key. For
+example,`{215: ["pigeon remoulade", "mixed fruit"]}`. (Note that numbers
+are stored internally as an integer representing pennies to avoid
+problems with floats. I saw a
 [video](http://www.tablexi.com/developers/money-in-ruby/) about this
 somewhere.)
 
@@ -131,7 +162,7 @@ contain one combination of prices that add up to the `desiredPrice`.
 `App` next instantiates `Formatter`, passing in `priceMap` and the
 results from `Knapsack.compute`. `Formatter`’s constructor creates an
 `Immutable.Set<Immutable.Set<string>>` of sentences in the form “7
-orders of mixed fruit (at $2.15 each).” `App` then requests that
+orders of mixed fruit (at \$2.15 each).” `App` then requests that
 result.
 
 Finally, `Browser` calls `App`’s `getDesiredPrice` and `getResults`
@@ -206,7 +237,7 @@ Reactive programming
 I made use of RxJS because I was trying to avoid callback hell (and also
 because I think it’s cool). The key event is waiting for the user to
 click on the `Select File` button. That event listener triggers
-launching the file open dialog window, which delivers the filename to a
+launching the open file dialog window, which delivers the filename to a
 callback. It is then necessary to validate the data in the file before
 instantiating the `App` class with the data. If the data is invalid, it
 is necessary to listen for another click and launch another dialog
@@ -228,7 +259,7 @@ Instead, we can pipeline a stream of clicks into a stream of validated
 file data. By subscribing to that stream, we can do this:
 
     dataObservable.subscribe(
-      (data) => { /* Instantiate app, display results */ }, 
+      (data) => { /* Instantiate app, display results */ },
       (err) => { /* Do something else */ }
     );
 
@@ -251,7 +282,7 @@ leading and trailing whitespace and blank lines. An additional TODO
 might be handling more kinds of malformed data—prices without dollar
 signs, punctuation within the food names, etc.
 
-Any types
+`Any` types
 ---------
 
 The TypeScript compiler gets confused by Immutable.js data structures in

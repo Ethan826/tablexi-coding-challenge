@@ -14,7 +14,9 @@ export class Parser {
   constructor(data: string) {
     this.data = data.trim();
     let errorString = "Invalid Data";
+
     if (!Parser.validateData(data)) throw errorString;
+
     try { // Defend against oversights in validateData function
       this.lines = this.getLines();
       this.desiredPrice = this.getDesiredPrice();

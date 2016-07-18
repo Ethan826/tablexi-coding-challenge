@@ -16,7 +16,7 @@ export class Browser {
   private initialPage: string;
   private resultsPage: string;
 
-  private clickListenerObserver: Rx.Observable<any>;
+  private clickListenerObserver: Rx.Observable<JQueryEventObject>;
   private fileSelectionObserver: Rx.Observable<Array<string>>;
   private fileDataObserver: Rx.Observable<string>;
   private appObserver: Rx.Observable<App>;
@@ -27,7 +27,7 @@ export class Browser {
     this.setPage(initialPage);
 
     // Returns an observable that will emit the file contents the user selects
-    // iff the data is valid
+    // iff the data is valid. See the README.
     this.getDataObservable().subscribe(
       (data) => {
         let app = new App(data);
@@ -43,7 +43,7 @@ export class Browser {
 
     // fromCallback() converts a function that takes a callback into a new
     // function that takes all of the original function's arguments except the
-    // callback
+    // callback and returns an Observable of the callback's return value.
     let opener = Rx.Observable.fromCallback(dialog.showOpenDialog);
     let reader = Rx.Observable.fromCallback(fs.readFile);
     let isValid: boolean;
@@ -52,17 +52,14 @@ export class Browser {
     // validated file data
     return click
       .flatMap(() => opener({ properties: ["openFile"] }) // returns the selected filename (as one-item array)
-      .filter(f => f) // Don't emit event if user didn't select a file
-      .flatMap(f => reader(f[0], "utf-8")) // map filename stream to file data stream
-      .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData]
-      .do(d => {
-
-        // Save validity info to outer scope to communicate to .filter().
-        // Otherwise .filter() has to re-run validateData().
-        isValid = Parser.validateData(d);
-        if (!isValid) alert("Invalid data");
-      })
-      .filter(() => isValid)); // Do not allow invalid data out
+        .filter(f => f) // Don't emit event if user didn't select a file
+        .flatMap(f => reader(f[0], "utf-8")) // map file name stream to file data stream
+        .map(d => d[1]) // Hack: Observable-wrapped readFile returns [null, fileData] (?)
+        .do(d => {
+          isValid = Parser.validateData(d); // put validity info in outer scope...
+          if (!isValid) alert("Invalid data");
+        })
+        .filter(() => isValid)); // ...so .filter() doesn't have to call validateData() again
   }
 
   private setPage(page: string) {
@@ -74,14 +71,12 @@ export class Browser {
     // Put the extracted budget on the page
     $("#budget").append(`${Formatter.formatCurrency(desiredPrice)}`);
 
-    // Empty results
     if (results.isEmpty()) {
       $("#preamble").append(`
         <div class="alert alert-danger" id="noresults">
           There is no combination of foods that satisfy your budget.
         </div>
       `);
-      // Else loop over results to populate list
     } else {
 
       // Each combo of results

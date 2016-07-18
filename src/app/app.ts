@@ -10,8 +10,7 @@ export class App {
   private priceCombinations: Set<List<number>>;
   private results: Set<Set<string>>;
 
-  // The data argument is the contents of the file.
-  constructor(data: string) {
+  constructor(data: string) { // data is the contents of the file
     let parserResults: ParserResults = (new Parser(data)).getParserResults();
     this.desiredPrice = parserResults.desiredPrice;
     this.priceMap = parserResults.foodEntries;

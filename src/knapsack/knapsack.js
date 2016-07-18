@@ -1,6 +1,5 @@
 "use strict";
 var immutable_1 = require("immutable");
-var memoize = require("memoizee");
 var Knapsack = (function () {
     function Knapsack() {
     }
@@ -31,7 +30,7 @@ var Knapsack = (function () {
                 });
                 if (newBudget === 0)
                     return immutable_1.List([immutable_1.List([price])]);
-                var results = _this.memoized(newMenuItems, newBudget);
+                var results = _this.computeHelper(newMenuItems, newBudget);
                 return results
                     ? results.map(function (e) { return e.concat(price); }).toSet()
                     : null;
@@ -39,9 +38,6 @@ var Knapsack = (function () {
         }
     };
     ;
-    Knapsack.memoized = memoize(Knapsack.computeHelper, { primitive: true });
     return Knapsack;
 }());
 exports.Knapsack = Knapsack;
-console.time("Knapsack.compute");
-console.log(Knapsack.compute(immutable_1.List([8, 6, 4, 21]), 30));

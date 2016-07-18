@@ -2,7 +2,7 @@
 
 import * as electron from "electron";
 
-/* Most code from Electron boilerplate, converted to TypeScript */
+// Most code / comments are from Electron boilerplate, converted to TypeScript
 
 // Module to control application life.
 const app = electron.app;
@@ -22,7 +22,7 @@ function createWindow() {
   mainWindow.loadURL(`file://${__dirname}/../index.html`);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools(); // Uncomment as needed
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {

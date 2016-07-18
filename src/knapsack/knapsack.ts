@@ -1,7 +1,6 @@
 /// <reference path="../../typings/index.d.ts"/>
 
 import {List, Set, Map, Iterable} from "immutable";
-let memoize = require("memoizee");
 
 export class Knapsack {
   static compute(
@@ -10,8 +9,6 @@ export class Knapsack {
     let results = this.computeHelper(prices, budget);
     return results ? results : Set();
   }
-
-  static memoized = memoize(Knapsack.computeHelper, { primitive: true });
 
   static computeHelper(
     prices: List<number> | Set<number>,
@@ -49,11 +46,12 @@ export class Knapsack {
           return c <= priceCeiling;
         });
 
-        // No recursion if the item under consideration exactly zeroes our budget.
+        // No recursion if the item under consideration exactly zeroes our
+        // budget.
         if (newBudget === 0) return List([List([price])]);
 
         // Recursive call
-        let results = this.memoized(newMenuItems as any, newBudget);
+        let results = this.computeHelper(newMenuItems as any, newBudget);
 
         // If recursion returned results, concat the item under consideration
         // onto each result and return that. If recursion didn't return results
@@ -65,6 +63,3 @@ export class Knapsack {
     }
   };
 }
-
-console.time("Knapsack.compute");
-console.log(Knapsack.compute(List([8, 6, 4, 21]), 30));

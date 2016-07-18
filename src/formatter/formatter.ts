@@ -15,7 +15,7 @@ export class Formatter {
       .map(c => this.frequencies(c));
 
     // Map of prices as keys and a list of all food items at that price
-    // joined by the word " or " e.g. { 200: "pickles or haggis gum" }
+    // joined by " or " -- e.g. { 200: "pickles or haggis gum" }
     this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
     this.sentences = this.makeSentences();
   }
@@ -26,9 +26,9 @@ export class Formatter {
 
   private combineSamePricedFoods() {
     return this.priceMap
-      .entrySeq() // Returns a list of [key, value] tuples for each Map entry
+      .entrySeq() // Returns a seq of [key, value] tuples for each Map entry
 
-      // Reduce over Seq of [key, value] tuples, outputting the same keys but
+      // Reduce over seq of [key, value] tuples, outputting the same keys but
       // converting the values from a Set of items ["food1", "food2"] to a
       // string joined with " or " to yield "food1 or food2"
       .reduce((accum: Map<number, string>, tuple: Seq<number, Set<string>>) => {
@@ -45,25 +45,23 @@ export class Formatter {
     return this.priceCombinationsWithFreqs
       .reduce((accum, el) => {
 
-        /* We begin building each sentence by creating three lists: prices,
-         * freqs (how many orders at that price), and foods (the names of all
-         * foods at that price, joined by " or "). The values stored at each
-         * index of the list correspond to one another, so freqs[0], foods[0]
-         * and prices[0] combine to describe one full sentence (e.g. 7, mixed
-         * fruit, 215).
-         */
+        // We begin building each sentence by creating three lists: prices,
+        // freqs (how many orders at that price), and foods (the names of all
+        // foods at that price, joined by " or "). The values stored at each
+        // index of the list correspond to one another, so freqs[0], foods[0]
+        // and prices[0] combine to describe one full sentence (e.g.
+        // freqs[0] = 7, foods[0] = mixed fruit, and prices[0] = 215).
 
         let prices = el.keySeq(); // the keys are the prices
         let freqs = el.valueSeq(); // the values are the frequencies
-
-        // priceMapWithCombinedFoods is of the form {215: "mixed fruit or
-        // grubs", 355: "hot wings", 580: "sampler plate"}.
-        let foods = prices
+        let foods = prices // Use the prices to lookup the food names
           .map(price => this.priceMapWithCombinedFoods.get(price));
 
         // Build the first part of the sentence by zipping the freqs list with
         // the foods list. zipWith interleaves two lists, combining the items
-        // of the two lists as specified by the passed-in function.
+        // of the two lists as specified by the passed-in function, which takes
+        // the value at each index of the first list as the first argument, and
+        // the value at each index of the second list as the second argument.
         let partialSentence = freqs.zipWith((freq, food) => {
           return `${freq} order${freq > 1 ? "s" : ""} of ${food}`; // pluralize order(s) as needed
         }, foods);
