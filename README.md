@@ -113,10 +113,11 @@ faster, calling `fib(33)` before and after calling `fib(32)` did not
 demonstrate a speedup. So `memoizee` did not capture the duplicated
 effort in running `fib()` with a larger argument.
 
-Immutable.Map would work well if it weren’t immutable—but I need to be
-able to mutate the data structure holding the memoized data because it
-has to sit outside the scope of the recursive function (there might be
-some functional programming trick to that but I don’t know it).
+Immutable.Map would work well as a way to store previously computed
+arguments—if it weren’t immutable—but I need to be able to mutate the
+data structure holding the memoized data because it has to sit outside
+the scope of the recursive function (there might be some functional
+programming trick to that but I don’t know it).
 
 So I decided to use the `object-hash` library and roll my own
 memoization. I coerce the `prices` argument to an array and then hash
@@ -170,7 +171,7 @@ result.
 `App` next instantiates `Formatter`, passing in `priceMap` and the
 results from `Knapsack.compute`. `Formatter`’s constructor creates an
 `Immutable.Set<Immutable.Set<string>>` of sentences in the form “7
-orders of mixed fruit (at \\\$2.15 each).” `App` then requests that
+orders of mixed fruit (at $2.15 each).” `App` then requests that
 result.
 
 Finally, `Browser` calls `App`’s `getDesiredPrice` and `getResults`
