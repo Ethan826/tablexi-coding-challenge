@@ -5,7 +5,7 @@ import {Parser} from "../parser/parser";
 import {Formatter} from "../formatter/formatter";
 import {initialPage, resultsPage} from "../templates/templates";
 
-import {OrderedSet} from "immutable";
+import {Set} from "immutable";
 import fs = require("fs");
 const {dialog} = require("electron").remote;
 const Rx = require("rx-lite");
@@ -67,7 +67,7 @@ export class Browser {
     $("#content").append(page);
   }
 
-  private populateResultsPage(desiredPrice: number, results: OrderedSet<OrderedSet<string>>) {
+  private populateResultsPage(desiredPrice: number, results: Set<Set<string>>) {
     // Put the extracted budget on the page
     $("#budget").append(Formatter.formatCurrency(desiredPrice));
 
