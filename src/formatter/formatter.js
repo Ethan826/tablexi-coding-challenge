@@ -5,10 +5,15 @@ var Formatter = (function () {
         var _this = this;
         this.priceMap = priceMap;
         this.priceCombinations = priceCombinations;
-        this.priceCombinationsWithFreqs = this.priceCombinations
-            .map(function (c) { return _this.frequencies(c); });
-        this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
-        this.sentences = this.makeSentences();
+        if (priceCombinations) {
+            this.priceCombinationsWithFreqs = this.priceCombinations
+                .map(function (c) { return _this.frequencies(c); });
+            this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
+            this.sentences = this.makeSentences();
+        }
+        else {
+            this.sentences = immutable_1.Set([]);
+        }
     }
     Formatter.prototype.getSentences = function () {
         return this.sentences;

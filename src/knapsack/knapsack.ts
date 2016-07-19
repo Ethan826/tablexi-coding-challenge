@@ -9,13 +9,13 @@ export class Knapsack {
 
   constructor(prices: List<number> | Set<number>, budget: number) {
     this.memo = {};
-    this.results = this.computeHelper(prices, budget) || Set([List([])]);
+    this.results = this.computeHelper(prices, budget);
   }
 
   getResults() { return this.results; }
 
   private hashArgs(prices, budget) {
-    return hash(hash(prices.toJS()) + hash(budget));
+    return hash(hash(prices.toJS().sort()) + hash(budget));
   }
 
   private computeHelper(
@@ -31,13 +31,13 @@ export class Knapsack {
 
     // Base cases
 
-    // If there are no prices, there can be no solution. Return null.
+    // If there are no prices, there can be no solution. Return empty set.
     if (prices.size === 0) {
-      let results = null;
+      let results = Set([]);
       this.memo[hashed] = results;
       return results;
 
-      // With one price, return null if price is not a factor of budget
+      // With one price, return empty set if price is not a factor of budget
       // or return a list of length budget / price filled with price.
       // E.g., for price 2 and budget 8, return List([2, 2, 2, 2]).
     } else if (prices.size === 1) {
@@ -47,7 +47,7 @@ export class Knapsack {
         this.memo[hashed] = results;
         return results;
       } else {
-        let results = null;
+        let results = Set([]);
         this.memo[hashed] = results;
         return results;
       }
@@ -81,10 +81,10 @@ export class Knapsack {
 
         // If recursion returned results, concat the item under consideration
         // onto each result and return that. If recursion didn't return results
-        // return null.
+        // return empty set.
         let results = recursive
           ? recursive.map((e: List<number>) => e.concat(price)).toSet()
-          : null;
+          : Set([]);
 
         this.memo[hashed] = results;
         return results;

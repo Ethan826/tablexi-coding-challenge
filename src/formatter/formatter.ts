@@ -11,13 +11,17 @@ export class Formatter {
   ) {
 
     // Consumes [[200 200] [100 100 100]], returns [{200: 2}, {100: 3}]
-    this.priceCombinationsWithFreqs = this.priceCombinations
-      .map(c => this.frequencies(c));
+    if (priceCombinations) {
+      this.priceCombinationsWithFreqs = this.priceCombinations
+        .map(c => this.frequencies(c));
 
-    // Map of prices as keys and a list of all food items at that price
-    // joined by " or " -- e.g. { 200: "pickles or haggis gum" }
-    this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
-    this.sentences = this.makeSentences();
+      // Map of prices as keys and a list of all food items at that price
+      // joined by " or " -- e.g. { 200: "pickles or haggis gum" }
+      this.priceMapWithCombinedFoods = this.combineSamePricedFoods();
+      this.sentences = this.makeSentences();
+    } else {
+      this.sentences = Set([]);
+    }
   }
 
   getSentences() {

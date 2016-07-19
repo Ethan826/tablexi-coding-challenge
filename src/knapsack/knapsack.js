@@ -4,11 +4,11 @@ var hash = require("object-hash");
 var Knapsack = (function () {
     function Knapsack(prices, budget) {
         this.memo = {};
-        this.results = this.computeHelper(prices, budget) || immutable_1.Set([immutable_1.List([])]);
+        this.results = this.computeHelper(prices, budget);
     }
     Knapsack.prototype.getResults = function () { return this.results; };
     Knapsack.prototype.hashArgs = function (prices, budget) {
-        return hash(hash(prices.toJS()) + hash(budget));
+        return hash(hash(prices.toJS().sort()) + hash(budget));
     };
     Knapsack.prototype.computeHelper = function (prices, budget) {
         var _this = this;
@@ -18,7 +18,7 @@ var Knapsack = (function () {
             return memoizedResult;
         }
         if (prices.size === 0) {
-            var results = null;
+            var results = immutable_1.Set([]);
             this.memo[hashed] = results;
             return results;
         }
@@ -30,7 +30,7 @@ var Knapsack = (function () {
                 return results;
             }
             else {
-                var results = null;
+                var results = immutable_1.Set([]);
                 this.memo[hashed] = results;
                 return results;
             }
@@ -51,7 +51,7 @@ var Knapsack = (function () {
                 var recursive = _this.computeHelper(newMenuItems, newBudget);
                 var results = recursive
                     ? recursive.map(function (e) { return e.concat(price); }).toSet()
-                    : null;
+                    : immutable_1.Set([]);
                 _this.memo[hashed] = results;
                 return results;
             });
