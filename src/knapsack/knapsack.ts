@@ -15,7 +15,7 @@ export class Knapsack {
   getResults() { return this.results; }
 
   private hashArgs(prices, budget) {
-    return hash(hash(prices.toJS().sort()) + hash(budget));
+    return hash(hash(prices.toJS()) + hash(budget));
   }
 
   private computeHelper(
