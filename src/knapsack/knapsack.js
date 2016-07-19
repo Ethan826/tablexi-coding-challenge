@@ -4,7 +4,7 @@ var hash = require("object-hash");
 var Knapsack = (function () {
     function Knapsack(prices, budget) {
         this.memo = {};
-        this.results = this.computeHelper(prices, budget);
+        this.results = this.computeHelper(prices.toOrderedSet(), budget);
     }
     Knapsack.prototype.getResults = function () { return this.results; };
     Knapsack.prototype.hashArgs = function (prices, budget) {
@@ -50,8 +50,8 @@ var Knapsack = (function () {
                 ;
                 var recursive = _this.computeHelper(newMenuItems, newBudget);
                 var results = recursive
-                    ? recursive.map(function (e) { return e.concat(price); }).toSet()
-                    : immutable_1.Set([]);
+                    ? recursive.map(function (e) { return e.concat(price); }).toOrderedSet()
+                    : immutable_1.OrderedSet([]);
                 _this.memo[hashed] = results;
                 return results;
             });

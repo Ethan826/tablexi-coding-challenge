@@ -17,6 +17,7 @@ describe("app data parsing", function () {
         [(prefix + "1.txt"), (prefix + "2.txt"), (prefix + "3.txt")].forEach(function (good) {
             var data = fs.readFileSync(good, "utf-8");
             new app_1.App(data);
+            expect(function () { return new app_1.App(data); }).not.toThrow();
         });
     });
     it("returns an empty Set for no results", function () {

@@ -92,7 +92,7 @@ export class Formatter {
           ? accum.update(el, val => val + 1) // If yes, increment the value
           : accum.set(el, 1); // If not, add that key and set the value to one
       },
-      Map({})
+      Map()
     );
   }
 }

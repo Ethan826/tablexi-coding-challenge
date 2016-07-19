@@ -1,15 +1,15 @@
 /// <reference path="../../typings/index.d.ts"/>
 
-import {List, Set, Map, Iterable} from "immutable";
+import {List, Set, OrderedSet, Map, Iterable} from "immutable";
 let hash = require("object-hash");
 
 export class Knapsack {
   private results: Set<List<number>>;
   private memo: Object;
 
-  constructor(prices: List<number> | Set<number>, budget: number) {
+  constructor(prices: OrderedSet<number>, budget: number) {
     this.memo = {};
-    this.results = this.computeHelper(prices, budget);
+    this.results = this.computeHelper(prices.toOrderedSet(), budget);
   }
 
   getResults() { return this.results; }
@@ -19,7 +19,7 @@ export class Knapsack {
   }
 
   private computeHelper(
-    prices: List<number> | Set<number>,
+    prices: OrderedSet<number>,
     budget: number): any { // actually Set<List<number>>
     let hashed = this.hashArgs(prices, budget);
 
@@ -83,8 +83,8 @@ export class Knapsack {
         // onto each result and return that. If recursion didn't return results
         // return empty set.
         let results = recursive
-          ? recursive.map((e: List<number>) => e.concat(price)).toSet()
-          : Set([]);
+          ? recursive.map((e: List<number>) => e.concat(price)).toOrderedSet()
+          : OrderedSet([]);
 
         this.memo[hashed] = results;
         return results;

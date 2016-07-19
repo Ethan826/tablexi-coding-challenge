@@ -1,4 +1,4 @@
-import {List, Map, Set} from "immutable";
+import {List, Map, OrderedSet} from "immutable";
 import {Parser, ParserResults} from "../parser/parser";
 import {Knapsack} from "../knapsack/knapsack";
 import {Browser} from "../browser/browser";
@@ -6,9 +6,9 @@ import {Formatter} from "../formatter/formatter";
 
 export class App {
   private desiredPrice: number;
-  private priceMap: Map<number, Set<string>>;
-  private priceCombinations: Set<List<number>>;
-  private results: Set<Set<string>>;
+  private priceMap: Map<number, OrderedSet<string>>;
+  private priceCombinations: OrderedSet<List<number>>;
+  private results: OrderedSet<OrderedSet<string>>;
 
   constructor(data: string) { // data is the contents of the file
     let parserResults: ParserResults = (new Parser(data)).getParserResults();
@@ -23,7 +23,7 @@ export class App {
     this.results = formatter.getSentences();
   }
 
-  getResults(): Set<Set<string>> {
+  getResults(): OrderedSet<OrderedSet<string>> {
     return this.results;
   }
 

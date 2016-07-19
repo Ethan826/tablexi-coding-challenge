@@ -50,7 +50,7 @@ var Formatter = (function () {
             return accum.has(el)
                 ? accum.update(el, function (val) { return val + 1; })
                 : accum.set(el, 1);
-        }, immutable_1.Map({}));
+        }, immutable_1.Map());
     };
     return Formatter;
 }());
