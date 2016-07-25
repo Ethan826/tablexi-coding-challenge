@@ -21,7 +21,7 @@ describe("app data parsing", () => {
     [`${prefix}1.txt`, `${prefix}2.txt`, `${prefix}3.txt`].forEach(good => {
       let data = fs.readFileSync(good, "utf-8");
       new App(data);
-      // expect(() => new App(data)).not.toThrow();
+      expect(() => new App(data)).not.toThrow();
     });
   });
 

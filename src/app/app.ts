@@ -1,4 +1,4 @@
-import {List, Map, Set} from "immutable";
+import {List, Map, Set, OrderedSet} from "immutable";
 import {Parser, ParserResults} from "../parser/parser";
 import {Knapsack} from "../knapsack/knapsack";
 import {Browser} from "../browser/browser";
@@ -15,7 +15,7 @@ export class App {
     this.desiredPrice = parserResults.desiredPrice;
     this.priceMap = parserResults.foodEntries;
     let knapsack = new Knapsack(
-      this.priceMap.keySeq().toSet(), // Seq of unique prices
+      this.priceMap.keySeq().toOrderedSet(), // Seq of unique prices
       this.desiredPrice
     );
     this.priceCombinations = knapsack.getResults();
