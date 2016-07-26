@@ -74,7 +74,7 @@ export class Browser {
     if (results.isEmpty() || results.first().isEmpty()) {
       $("#preamble").append(`
         <div class="alert alert-danger" id="noresults">
-          There is no combination of foods that satisfy your budget.
+          There is no combination of foods that satisfies your budget.
         </div>
       `);
     } else {

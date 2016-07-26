@@ -7,7 +7,7 @@ export class Knapsack {
   private results: Set<List<number>>;
   private memo: Object;
 
-  constructor(prices: OrderedSet<number>, budget: number) {
+  constructor(prices: OrderedSet<number> | Set<number>, budget: number) {
     this.memo = {};
     this.results = this.computeHelper(prices.toOrderedSet(), budget);
   }
@@ -66,7 +66,7 @@ export class Knapsack {
         let newMenuItems = prices.filter(c => {
           let priceCeiling = Math.min(newBudget, price);
           return c <= priceCeiling;
-        });
+        }) as OrderedSet<number>; // Should remain an OrderedSet after filter
 
         // No recursion if the item under consideration exactly zeroes our
         // budget.
@@ -77,13 +77,13 @@ export class Knapsack {
         };
 
         // Recursive call
-        let recursive = this.computeHelper(newMenuItems as any, newBudget);
+        let recursive = this.computeHelper(newMenuItems, newBudget);
 
         // If recursion returned results, concat the item under consideration
         // onto each result and return that. If recursion didn't return results
         // return empty set.
         let results = recursive
-          ? recursive.map((e: List<number>) => e.concat(price)).toOrderedSet()
+          ? recursive.map((e: List<number>) => e.concat(price)).toSet()
           : OrderedSet([]);
 
         this.memo[hashed] = results;

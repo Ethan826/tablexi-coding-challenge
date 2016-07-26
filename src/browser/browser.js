@@ -43,7 +43,7 @@ var Browser = (function () {
     Browser.prototype.populateResultsPage = function (desiredPrice, results) {
         $("#budget").append(formatter_1.Formatter.formatCurrency(desiredPrice));
         if (results.isEmpty() || results.first().isEmpty()) {
-            $("#preamble").append("\n        <div class=\"alert alert-danger\" id=\"noresults\">\n          There is no combination of foods that satisfy your budget.\n        </div>\n      ");
+            $("#preamble").append("\n        <div class=\"alert alert-danger\" id=\"noresults\">\n          There is no combination of foods that satisfies your budget.\n        </div>\n      ");
         }
         else {
             results.forEach(function (combo) {

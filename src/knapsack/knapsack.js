@@ -50,7 +50,7 @@ var Knapsack = (function () {
                 ;
                 var recursive = _this.computeHelper(newMenuItems, newBudget);
                 var results = recursive
-                    ? recursive.map(function (e) { return e.concat(price); }).toOrderedSet()
+                    ? recursive.map(function (e) { return e.concat(price); }).toSet()
                     : immutable_1.OrderedSet([]);
                 _this.memo[hashed] = results;
                 return results;

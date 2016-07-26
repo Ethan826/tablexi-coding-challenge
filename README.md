@@ -18,9 +18,9 @@ Description
 
 The core of the application is the function `compute` (and
 `computeHelper`) in the `Knapsack` class. The function takes two
-arguments: an Immutable.Set of numbers corresponding to menu prices and
-a number corresponding to the budget / target price. It returns a
-Immutable.List of Immutable.Sets of combinations that sum to the budget.
+arguments: an `Immutable.Set` of numbers corresponding to menu prices and
+a number corresponding to the budget\ / target price. It returns a
+`Immutable.Set` of `Immutable.Lists` of combinations that sum to the budget.
 
 This could be refactored less cleanly to use ES6 tail call optimization,
 but (1) TCO is not implemented in any of the polyfills, see
@@ -71,8 +71,8 @@ would fail to return any result.
 ### Example
 
 Note that these examples are simplified by eliding the facts that we use
-`Immutable.List` and that there are some quirks with nesting and
-flattening lists of lists.
+`Immutable.List` and `Immutable.OrderedSet` that there are some quirks with
+nesting and flattening lists of lists.
 
 Consider the following example: the menu items are `[2, 3, 4]`, and the
 budget is 6. The algorithm makes a recursive call on each of the
@@ -113,7 +113,7 @@ faster, calling `fib(33)` before and after calling `fib(32)` did not
 demonstrate a speedup. So `memoizee` did not capture the duplicated
 effort in running `fib()` with a larger argument.
 
-Immutable.Map would work well as a way to store previously computed
+`Immutable.Map` would work well as a way to store previously computed
 arguments—if it weren’t immutable—but I need to be able to mutate the
 data structure holding the memoized data because it has to sit outside
 the scope of the recursive function (there might be some functional
@@ -160,9 +160,9 @@ problems with floats. I saw a
 somewhere.)
 
 Now, `App` requests `desiredPrice` and `priceMap` from `Parser`. `App`
-then instantiates a `Backpack` passing in an `Immutable.Set` of prices
-and a `desiredPrice`. `Backpack`’s constructor calls `compute` (which
-calls `computeHelper`) calculating results as an
+then instantiates a `Knapsack` passing in an `Immutable.OrderedSet` of
+prices and a `desiredPrice`. `Knapsack`’s constructor calls `compute`
+(which calls `computeHelper`) calculating results as an
 `Immutable.Set<Immutable.List<number>>`. The inner collections each
 contain one combination of prices that add up to the `desiredPrice`.
 `App` calls `getResults` on its instance of `Backpack` to receive that
